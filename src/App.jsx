@@ -3,6 +3,7 @@ import BudgetSetup from './components/BudgetSetup';
 import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
 import { useBudget } from './hooks/useBudget';
+import LandingPage from './components/LandingPage';
 import { LogOut } from 'lucide-react';
 
 function MainApp({ userId }) {
@@ -63,6 +64,7 @@ function MainApp({ userId }) {
 
 function App() {
   const [userId, setUserId] = useState(null);
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     // Cek auth di localStorage
@@ -74,7 +76,15 @@ function App() {
 
   return (
     <div style={{ width: '100%' }}>
-      {!userId ? <Auth onLoginSuccess={(user) => setUserId(user.id)} /> : <MainApp userId={userId} />}
+      {!userId ? (
+        !showAuth ? (
+          <LandingPage onStart={() => setShowAuth(true)} />
+        ) : (
+          <Auth onLoginSuccess={(user) => setUserId(user.id)} />
+        )
+      ) : (
+        <MainApp userId={userId} />
+      )}
     </div>
   );
 }
