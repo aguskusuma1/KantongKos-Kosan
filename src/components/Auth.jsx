@@ -7,11 +7,17 @@ export default function Auth({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleAuth = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       alert('Email dan Password wajib diisi!');
+      return;
+    }
+
+    if (!isLogin && password !== confirmPassword) {
+      alert('Password dan Konfirmasi Password tidak sama!');
       return;
     }
     
@@ -33,6 +39,8 @@ export default function Auth({ onLoginSuccess }) {
         });
         alert('Registrasi berhasil! Silakan login.');
         setIsLogin(true);
+        setPassword('');
+        setConfirmPassword('');
       }
     } catch (error) {
       alert(`Error: ${error.message}`);
@@ -45,9 +53,11 @@ export default function Auth({ onLoginSuccess }) {
     <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '400px', margin: '0 auto', padding: '40px 24px' }}>
       <header style={{ marginBottom: '30px', textAlign: 'center' }}>
         <h1 style={{ fontSize: '1.8rem', fontWeight: '700', background: 'linear-gradient(to right, #60a5fa, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Auto-Budgeting
+          {isLogin ? 'Auto-Budgeting' : 'Buat Akun Baru'}
         </h1>
-        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Masuk untuk melanjutkan</p>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+          {isLogin ? 'Masuk untuk melanjutkan' : 'Daftar untuk mengontrol keuanganmu'}
+        </p>
       </header>
 
       <form onSubmit={handleAuth}>
@@ -82,6 +92,24 @@ export default function Auth({ onLoginSuccess }) {
             />
           </div>
         </div>
+
+        {!isLogin && (
+          <div className="input-group">
+            <label className="input-label" style={{ textAlign: 'left' }}>Konfirmasi Password</label>
+            <div style={{ position: 'relative' }}>
+              <Lock size={18} style={{ position: 'absolute', top: '15px', left: '16px', color: 'var(--text-secondary)' }} />
+              <input 
+                type="password" 
+                className="input-field" 
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                style={{ paddingLeft: '44px' }}
+                required={!isLogin}
+              />
+            </div>
+          </div>
+        )}
 
         <button type="submit" className="btn btn-primary" style={{ marginTop: '20px' }} disabled={loading}>
           {loading ? 'Memproses...' : (isLogin ? <><LogIn size={20}/> Masuk</> : <><UserPlus size={20}/> Daftar</>)}
