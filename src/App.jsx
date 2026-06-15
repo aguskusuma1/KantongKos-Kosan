@@ -13,7 +13,8 @@ function MainApp({ userId }) {
     todayBudget, 
     todaySpent, 
     saveBudget, 
-    addExpense 
+    addExpense,
+    expenses
   } = useBudget(userId);
 
   if (loading) {
@@ -55,6 +56,7 @@ function MainApp({ userId }) {
             todaySpent={todaySpent} 
             onAddExpense={addExpense}
             totalBudget={budget.total_budget}
+            expenses={expenses}
           />
         )}
       </div>

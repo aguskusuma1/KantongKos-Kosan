@@ -1,8 +1,9 @@
 import React from 'react';
 import VisualMeter from './VisualMeter';
 import ExpenseForm from './ExpenseForm';
+import ExpenseHistory from './ExpenseHistory';
 
-export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget }) {
+export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget, expenses }) {
   return (
     <div className="animate-fade-in" style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
       <header style={{ marginBottom: '24px', textAlign: 'center' }}>
@@ -21,6 +22,8 @@ export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, total
           Total Budget Bulan Ini: Rp {Math.round(totalBudget).toLocaleString('id-ID')}
         </p>
       </div>
+
+      <ExpenseHistory expenses={expenses || []} />
     </div>
   );
 }
