@@ -1,41 +1,110 @@
-// URL API kita (karena api.php ditaruh di public, saat di-build akan berada di root yang sama dengan index.html)
-// Jika di localhost Vite, kita arahkan ke URL production atau localhost PHP server.
-// Untuk kemudahan, kita buat relatif ke domain saat ini.
-const API_BASE_URL = import.meta.env.DEV ? 'http://localhost/autobudget_api/api.php' : '/api.php';
+import { supabase } from './supabase';
 
 export const api = {
   async fetch(action, options = {}) {
     const userId = localStorage.getItem('ab_user_id');
-    const headers = {
-      'Content-Type': 'application/json',
-      ...options.headers
-    };
-    
-    if (userId) {
-      headers['X-User-Id'] = userId;
-    }
-
-    let url = `${API_BASE_URL}?action=${action}`;
-    
-    if (options.params) {
-      const qs = new URLSearchParams(options.params).toString();
-      url += `&${qs}`;
-    }
+    const body = options.body || {};
+    const params = options.params || {};
 
     try {
-      const response = await window.fetch(url, {
-        method: options.method || 'GET',
-        headers,
-        body: options.body ? JSON.stringify(options.body) : undefined
-      });
-
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
+      if (action === 'register') {
+        const { data, error } = await supabase.auth.signUp({
+          email: body.email,
+          password: body.password,
+        });
+        if (error) throw new Error(error.message);
+        if (!data.user) throw new Error('Registrasi berhasil, silakan periksa email Anda.');
+        return { message: 'Registrasi berhasil', user: { id: data.user.id, email: data.user.email } };
       }
-      
-      return data;
+
+      if (action === 'login') {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: body.email,
+          password: body.password,
+        });
+        if (error) throw new Error(error.message);
+        return { message: 'Login berhasil', user: { id: data.user.id, email: data.user.email } };
+      }
+
+      if (!userId) {
+        throw new Error('Unauthorized');
+      }
+
+      if (action === 'get_budget') {
+        const { data, error } = await supabase
+          .from('user_budgets')
+          .select('*')
+          .eq('user_id', userId)
+          .eq('month_year', params.month_year)
+          .maybeSingle();
+        
+        if (error) throw new Error(error.message);
+        return { data: data || null };
+      }
+
+      if (action === 'save_budget') {
+        // Find existing first to avoid unique constraint issues if upsert behavior varies
+        const { data: existing } = await supabase
+          .from('user_budgets')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('month_year', body.month_year)
+          .maybeSingle();
+
+        if (existing) {
+          const { data, error } = await supabase
+            .from('user_budgets')
+            .update({ total_budget: body.total_budget })
+            .eq('id', existing.id)
+            .select()
+            .single();
+          if (error) throw new Error(error.message);
+          return { data };
+        } else {
+          const { data, error } = await supabase
+            .from('user_budgets')
+            .insert({ 
+              user_id: userId, 
+              month_year: body.month_year, 
+              total_budget: body.total_budget 
+            })
+            .select()
+            .single();
+          if (error) throw new Error(error.message);
+          return { data };
+        }
+      }
+
+      if (action === 'get_expenses') {
+        const { data, error } = await supabase
+          .from('expenses')
+          .select('*')
+          .eq('user_id', userId)
+          .gte('expense_date', params.start_date)
+          .lte('expense_date', params.end_date)
+          .order('expense_date', { ascending: true });
+          
+        if (error) throw new Error(error.message);
+        return { data: data || [] };
+      }
+
+      if (action === 'add_expense') {
+        const { data, error } = await supabase
+          .from('expenses')
+          .insert({
+            user_id: userId,
+            amount: body.amount,
+            description: body.description,
+            expense_date: body.expense_date
+          })
+          .select()
+          .single();
+          
+        if (error) throw new Error(error.message);
+        return { data };
+      }
+
+      throw new Error('Aksi tidak dikenali');
     } catch (e) {
       throw e;
     }
