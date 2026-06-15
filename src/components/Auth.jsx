@@ -8,16 +8,21 @@ export default function Auth({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleAuth = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+    
     if (!email || !password) {
-      alert('Email dan Password wajib diisi!');
+      setErrorMessage('Email dan Password wajib diisi!');
       return;
     }
 
     if (!isLogin && password !== confirmPassword) {
-      alert('Password dan Konfirmasi Password tidak sama!');
+      setErrorMessage('Password dan Konfirmasi Password tidak sama!');
       return;
     }
     
@@ -29,7 +34,6 @@ export default function Auth({ onLoginSuccess }) {
           method: 'POST',
           body: { email, password }
         });
-        alert(res.message);
         localStorage.setItem('ab_user_id', res.user.id);
         if(onLoginSuccess) onLoginSuccess(res.user);
       } else {
@@ -37,13 +41,17 @@ export default function Auth({ onLoginSuccess }) {
           method: 'POST',
           body: { email, password }
         });
-        alert('Registrasi berhasil! Silakan login.');
+        setSuccessMessage('Registrasi berhasil! Silakan login.');
         setIsLogin(true);
         setPassword('');
         setConfirmPassword('');
       }
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      if (error.message.includes('Failed to fetch')) {
+        setErrorMessage('Gagal terhubung ke server. Pastikan internet Anda stabil atau tunggu server selesai update.');
+      } else {
+        setErrorMessage(error.message);
+      }
     }
     
     setLoading(false);
@@ -59,6 +67,18 @@ export default function Auth({ onLoginSuccess }) {
           {isLogin ? 'Masuk untuk melanjutkan' : 'Daftar untuk mengontrol keuanganmu'}
         </p>
       </header>
+
+      {errorMessage && (
+        <div style={{ padding: '12px', marginBottom: '20px', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', borderRadius: 'var(--radius-sm)', fontSize: '0.9rem', textAlign: 'center', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+          {errorMessage}
+        </div>
+      )}
+
+      {successMessage && (
+        <div style={{ padding: '12px', marginBottom: '20px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--success)', borderRadius: 'var(--radius-sm)', fontSize: '0.9rem', textAlign: 'center', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+          {successMessage}
+        </div>
+      )}
 
       <form onSubmit={handleAuth}>
         <div className="input-group">
@@ -119,7 +139,11 @@ export default function Auth({ onLoginSuccess }) {
       <div style={{ marginTop: '24px', textAlign: 'center' }}>
         <button 
           type="button"
-          onClick={() => setIsLogin(!isLogin)} 
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setErrorMessage('');
+            setSuccessMessage('');
+          }} 
           style={{ 
             background: 'none', border: 'none', color: 'var(--text-secondary)', 
             fontSize: '0.9rem', cursor: 'pointer', textDecoration: 'underline' 
