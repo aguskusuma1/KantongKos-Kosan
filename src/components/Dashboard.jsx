@@ -2,6 +2,7 @@ import React from 'react';
 import VisualMeter from './VisualMeter';
 import ExpenseForm from './ExpenseForm';
 import ExpenseHistory from './ExpenseHistory';
+import FoodRecommendations from './FoodRecommendations';
 
 export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget, expenses }) {
   return (
@@ -24,6 +25,8 @@ export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, total
       </div>
 
       <ExpenseHistory expenses={expenses || []} totalBudget={totalBudget} />
+      
+      <FoodRecommendations />
     </div>
   );
 }
