@@ -23,7 +23,7 @@ export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, total
         </p>
       </div>
 
-      <ExpenseHistory expenses={expenses || []} />
+      <ExpenseHistory expenses={expenses || []} totalBudget={totalBudget} />
     </div>
   );
 }

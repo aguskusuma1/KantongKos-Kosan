@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Calendar, FileText } from 'lucide-react';
+import { Calendar, FileText, Activity } from 'lucide-react';
 
-export default function ExpenseHistory({ expenses }) {
+export default function ExpenseHistory({ expenses, totalBudget }) {
   const today = new Date();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
@@ -19,13 +19,34 @@ export default function ExpenseHistory({ expenses }) {
   }
   for (let i = 1; i <= daysInMonth; i++) {
     const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+    
+    // Calculate daily limits
+    const spentBeforeThisDay = expenses
+      .filter(e => e.expense_date < dateStr)
+      .reduce((sum, e) => sum + Number(e.amount), 0);
+      
+    const remainingBudgetBeforeThisDay = (totalBudget || 0) - spentBeforeThisDay;
+    const remainingDays = daysInMonth - i + 1;
+    const budgetLimitForThisDay = totalBudget > 0 ? Math.max(0, remainingBudgetBeforeThisDay / remainingDays) : 0;
+    
+    const spentOnThisDay = expenses
+      .filter(e => e.expense_date === dateStr)
+      .reduce((sum, e) => sum + Number(e.amount), 0);
+      
+    const isOverBudget = spentOnThisDay > budgetLimitForThisDay;
+    const hasExpense = spentOnThisDay > 0;
+
     days.push({
       day: i,
       dateStr,
-      hasExpense: expenses.some(e => e.expense_date === dateStr)
+      hasExpense,
+      spent: spentOnThisDay,
+      limit: budgetLimitForThisDay,
+      isOver: isOverBudget
     });
   }
 
+  const selectedDayObj = days.find(d => d && d.dateStr === selectedDate);
   const selectedExpenses = expenses.filter(e => e.expense_date === selectedDate);
 
   const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -56,7 +77,8 @@ export default function ExpenseHistory({ expenses }) {
       <div style={{ 
         display: 'grid', 
         gridTemplateColumns: 'repeat(7, 1fr)', 
-        gap: '4px'
+        gap: '6px',
+        marginBottom: '8px'
       }}>
         {days.map((d, i) => {
           if (!d) return <div key={`empty-${i}`} />;
@@ -64,24 +86,49 @@ export default function ExpenseHistory({ expenses }) {
           const isSelected = d.dateStr === selectedDate;
           const isToday = d.dateStr === today.toISOString().split('T')[0];
           
+          // Determine color scheme based on budget mapping
+          let bgColor = 'transparent';
+          let textColor = 'var(--text-primary)';
+          let borderColor = '1px solid transparent';
+          
+          if (d.hasExpense) {
+            if (d.isOver) {
+              bgColor = 'rgba(239, 68, 68, 0.15)'; // faint red
+              textColor = 'var(--danger)';
+            } else {
+              bgColor = 'rgba(16, 185, 129, 0.15)'; // faint green
+              textColor = 'var(--success)';
+            }
+          }
+          
+          if (isToday && !isSelected) {
+            borderColor = '1px solid var(--primary)';
+          }
+          
+          if (isSelected) {
+            borderColor = '2px solid var(--primary)';
+            if (!d.hasExpense) bgColor = 'rgba(59, 130, 246, 0.1)';
+          }
+          
           return (
             <button
               key={d.dateStr}
               onClick={() => setSelectedDate(d.dateStr)}
               style={{
-                background: isSelected ? 'var(--primary)' : (d.hasExpense ? 'rgba(59, 130, 246, 0.2)' : 'transparent'),
-                color: isSelected ? 'white' : 'var(--text-primary)',
-                border: isToday && !isSelected ? '1px solid var(--primary)' : '1px solid transparent',
+                background: bgColor,
+                color: textColor,
+                border: borderColor,
                 borderRadius: 'var(--radius-sm)',
                 padding: '8px 0',
                 cursor: 'pointer',
-                fontWeight: isSelected ? '600' : '400',
+                fontWeight: isSelected || d.hasExpense ? '600' : '400',
                 transition: 'all 0.2s ease',
-                position: 'relative'
+                position: 'relative',
+                minHeight: '40px'
               }}
             >
               {d.day}
-              {d.hasExpense && !isSelected && (
+              {d.hasExpense && (
                 <div style={{
                   position: 'absolute',
                   bottom: '2px',
@@ -90,18 +137,55 @@ export default function ExpenseHistory({ expenses }) {
                   width: '4px',
                   height: '4px',
                   borderRadius: '50%',
-                  background: 'var(--primary)'
+                  background: d.isOver ? 'var(--danger)' : 'var(--success)'
                 }} />
               )}
             </button>
           );
         })}
       </div>
+      
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--success)' }}></div> Aman
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--danger)' }}></div> Over Budget
+        </div>
+      </div>
 
-      <div style={{ marginTop: '24px' }}>
+      <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+          <Activity size={18} color="var(--primary)" />
+          <h3 style={{ fontSize: '1rem', margin: 0 }}>Ringkasan: {selectedDate}</h3>
+        </div>
+
+        {selectedDayObj && (
+          <div style={{ background: 'rgba(15, 23, 42, 0.3)', padding: '16px', borderRadius: 'var(--radius-sm)', marginBottom: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', textAlign: 'center' }}>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Jatah Hari Ini</div>
+              <div style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+                Rp {Math.round(selectedDayObj.limit).toLocaleString('id-ID')}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Terpakai</div>
+              <div style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
+                Rp {Math.round(selectedDayObj.spent).toLocaleString('id-ID')}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Status</div>
+              <div style={{ fontWeight: '700', color: selectedDayObj.hasExpense ? (selectedDayObj.isOver ? 'var(--danger)' : 'var(--success)') : 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                {!selectedDayObj.hasExpense ? 'Belum Ada' : (selectedDayObj.isOver ? 'Over Budget' : 'Aman')}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', marginTop: '20px' }}>
           <FileText size={18} color="var(--primary)" />
-          <h3 style={{ fontSize: '1rem', margin: 0 }}>Catatan: {selectedDate}</h3>
+          <h3 style={{ fontSize: '1rem', margin: 0 }}>Catatan Pengeluaran</h3>
         </div>
 
         {selectedExpenses.length > 0 ? (
