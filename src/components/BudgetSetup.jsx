@@ -5,7 +5,6 @@ export default function BudgetSetup({ onSave }) {
   const [amount, setAmount] = useState('');
 
   const handleSubmit = (e) => {
-    e.updateDefault?.(); // if e is a synthetic event but we shouldn't use updateDefault, use preventDefault
     e.preventDefault();
     if (!amount || isNaN(amount) || Number(amount) <= 0) return;
     onSave(Number(amount));

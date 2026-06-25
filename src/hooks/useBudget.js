@@ -5,8 +5,6 @@ export function useBudget(userId) {
   const [loading, setLoading] = useState(true);
   const [budget, setBudget] = useState(null);
   const [expenses, setExpenses] = useState([]);
-  const [todayBudget, setTodayBudget] = useState(0);
-  const [todaySpent, setTodaySpent] = useState(0);
 
   const currentDate = new Date();
   const currentMonthYear = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
@@ -21,7 +19,7 @@ export function useBudget(userId) {
     fetchData();
   }, [userId]);
 
-  const fetchData = async () => {
+  async function fetchData() {
     setLoading(true);
     try {
       const budgetRes = await api.fetch('get_budget', {
@@ -52,30 +50,24 @@ export function useBudget(userId) {
     }
     
     setLoading(false);
-  };
+  }
 
-  useEffect(() => {
-    if (!budget) return;
+  const todaySpent = expenses
+    .filter(e => e.expense_date === todayStr)
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const spentBeforeToday = expenses
+    .filter(e => e.expense_date < todayStr)
+    .reduce((sum, e) => sum + Number(e.amount), 0);
     
-    const spentToday = expenses
-      .filter(e => e.expense_date === todayStr)
-      .reduce((sum, e) => sum + Number(e.amount), 0);
-    setTodaySpent(spentToday);
-
-    const spentBeforeToday = expenses
-      .filter(e => e.expense_date < todayStr)
-      .reduce((sum, e) => sum + Number(e.amount), 0);
-      
+  let todayBudget = 0;
+  if (budget) {
     const remainingBudgetBeforeToday = budget.total_budget - spentBeforeToday;
-    
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
     const currentDay = currentDate.getDate();
     const remainingDays = daysInMonth - currentDay + 1;
-    
-    const calculatedTodayBudget = Math.max(0, remainingBudgetBeforeToday / remainingDays);
-    setTodayBudget(calculatedTodayBudget);
-    
-  }, [budget, expenses, todayStr]);
+    todayBudget = Math.max(0, remainingBudgetBeforeToday / remainingDays);
+  }
 
   const saveBudget = async (amount) => {
     try {

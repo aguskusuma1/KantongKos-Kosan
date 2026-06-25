@@ -65,16 +65,8 @@ function MainApp({ userId }) {
 }
 
 function App() {
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(() => localStorage.getItem('ab_user_id'));
   const [showAuth, setShowAuth] = useState(false);
-
-  useEffect(() => {
-    // Cek auth di localStorage
-    const savedUserId = localStorage.getItem('ab_user_id');
-    if (savedUserId) {
-      setUserId(savedUserId);
-    }
-  }, []);
 
   return (
     <div style={{ width: '100%' }}>
