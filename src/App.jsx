@@ -35,7 +35,7 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
 
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 40 }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px' }}>
         <button 
           onClick={() => setShowSettings(true)}
           style={{ 
@@ -59,7 +59,7 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
         />
       )}
 
-      <div style={{ padding: '20px 0', width: '100%', display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+      <div style={{ paddingBottom: '20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
         {(!budget || isEditingBudget) ? (
           <BudgetSetup onSave={handleSaveBudget} />
         ) : (
@@ -96,9 +96,9 @@ function App() {
   };
 
   return (
-    <div style={{ width: '100%', position: 'relative' }}>
+    <div style={{ width: '100%' }}>
       {!userId && (
-        <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px', zIndex: 50 }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px' }}>
           <button 
             onClick={toggleTheme}
             style={{ 
