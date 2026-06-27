@@ -1,43 +1,130 @@
 import React, { useState } from 'react';
-import { Wallet } from 'lucide-react';
+import { Wallet, Calendar, CalendarDays, ArrowLeft } from 'lucide-react';
 
 export default function BudgetSetup({ onSave }) {
+  const [step, setStep] = useState(1);
+  const [mode, setMode] = useState(''); // 'bulanan' or 'mingguan'
   const [amount, setAmount] = useState('');
+
+  const handleSelectMode = (selectedMode) => {
+    setMode(selectedMode);
+    setStep(2);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!amount || isNaN(amount) || Number(amount) <= 0) return;
-    onSave(Number(amount));
+    
+    let finalAmount = Number(amount);
+    if (mode === 'mingguan') {
+      finalAmount = finalAmount * 4; // Asumsi 1 bulan = 4 minggu
+    }
+    
+    onSave(finalAmount);
   };
 
   return (
-    <div className="glass-panel animate-fade-in" style={{ textAlign: 'center', padding: '40px 24px' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-        <div style={{ background: 'rgba(59, 130, 246, 0.2)', padding: '16px', borderRadius: '50%' }}>
-          <Wallet size={48} color="var(--primary)" />
-        </div>
-      </div>
-      <h2 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>Selamat Datang!</h2>
-      <p style={{ marginBottom: '30px' }}>
-        Berapa total dana yang Anda miliki untuk bulan ini? Kami akan membaginya secara otomatis.
-      </p>
+    <div className="glass-panel animate-fade-in" style={{ textAlign: 'center', padding: '40px 24px', width: '100%', maxWidth: '400px' }}>
       
-      <form onSubmit={handleSubmit}>
-        <div className="input-group">
-          <label className="input-label" style={{ textAlign: 'left' }}>Total Budget Bulan Ini (Rp)</label>
-          <input 
-            type="number" 
-            className="input-field" 
-            placeholder="Contoh: 1500000"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            autoFocus
-          />
+      {step === 1 && (
+        <div className="animate-fade-in">
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+            <div style={{ background: 'var(--panel-track-bg)', padding: '16px', borderRadius: '50%' }}>
+              <Wallet size={48} color="var(--primary)" />
+            </div>
+          </div>
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>Selamat Datang!</h2>
+          <p style={{ marginBottom: '30px', color: 'var(--text-secondary)' }}>
+            Bagaimana Anda ingin mengatur budget Anda?
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <button 
+              onClick={() => handleSelectMode('bulanan')}
+              className="btn"
+              style={{ 
+                background: 'var(--panel-bg)', color: 'var(--text-primary)', 
+                border: '1px solid var(--surface-border)', padding: '20px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px'
+              }}
+            >
+              <CalendarDays size={32} color="var(--primary)" />
+              <div>
+                <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>Mode Bulanan</div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                  Atur total budget untuk 1 bulan penuh
+                </div>
+              </div>
+            </button>
+
+            <button 
+              onClick={() => handleSelectMode('mingguan')}
+              className="btn"
+              style={{ 
+                background: 'var(--panel-bg)', color: 'var(--text-primary)', 
+                border: '1px solid var(--surface-border)', padding: '20px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px'
+              }}
+            >
+              <Calendar size={32} color="var(--warning)" />
+              <div>
+                <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>Mode Mingguan</div>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                  Atur budget per minggu (Sistem akan mengalikan 4)
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
-        <button type="submit" className="btn btn-primary" style={{ marginTop: '10px' }}>
-          Mulai Budgeting
-        </button>
-      </form>
+      )}
+
+      {step === 2 && (
+        <div className="animate-fade-in">
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
+            <button 
+              onClick={() => setStep(1)}
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <h2 style={{ fontSize: '1.5rem', flex: 1, textAlign: 'center', paddingRight: '24px' }}>
+              Nominal {mode === 'mingguan' ? 'Mingguan' : 'Bulanan'}
+            </h2>
+          </div>
+          
+          <p style={{ marginBottom: '30px', color: 'var(--text-secondary)' }}>
+            {mode === 'mingguan' 
+              ? 'Berapa jatah budget Anda untuk SATU MINGGU? Kami akan mengalikannya menjadi budget sebulan.'
+              : 'Berapa total dana yang Anda miliki untuk BULAN INI? Kami akan membaginya secara otomatis.'}
+          </p>
+          
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label className="input-label" style={{ textAlign: 'left' }}>
+                Total Budget {mode === 'mingguan' ? 'Per Minggu' : 'Bulan Ini'} (Rp)
+              </label>
+              <input 
+                type="number" 
+                className="input-field" 
+                placeholder={mode === 'mingguan' ? "Contoh: 350000" : "Contoh: 1500000"}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                autoFocus
+              />
+            </div>
+
+            {mode === 'mingguan' && amount && (
+              <div style={{ background: 'var(--panel-track-bg)', padding: '12px', borderRadius: 'var(--radius-sm)', marginBottom: '16px', fontSize: '0.9rem' }}>
+                Total sebulan: <strong>Rp {(Number(amount) * 4).toLocaleString('id-ID')}</strong>
+              </div>
+            )}
+
+            <button type="submit" className="btn btn-primary" style={{ marginTop: '10px' }}>
+              Mulai Budgeting
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
