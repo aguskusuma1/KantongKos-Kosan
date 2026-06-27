@@ -4,9 +4,12 @@ import Dashboard from './components/Dashboard';
 import Auth from './components/Auth';
 import { useBudget } from './hooks/useBudget';
 import LandingPage from './components/LandingPage';
-import { LogOut, Sun, Moon } from 'lucide-react';
+import SettingsModal from './components/SettingsModal';
+import { LogOut, Sun, Moon, Settings } from 'lucide-react';
 
-function MainApp({ userId }) {
+function MainApp({ userId, theme, toggleTheme, handleLogout }) {
+  const [showSettings, setShowSettings] = useState(false);
+  const [isEditingBudget, setIsEditingBudget] = useState(false);
   const { 
     loading, 
     budget, 
@@ -25,11 +28,40 @@ function MainApp({ userId }) {
     );
   }
 
+  const handleSaveBudget = (amount) => {
+    saveBudget(amount);
+    setIsEditingBudget(false);
+  };
+
   return (
     <div style={{ width: '100%' }}>
+      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 40 }}>
+        <button 
+          onClick={() => setShowSettings(true)}
+          style={{ 
+            background: 'var(--panel-track-bg)', color: 'var(--text-primary)', 
+            border: '1px solid var(--surface-border)', padding: '8px', borderRadius: '50%',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}
+          title="Pengaturan"
+        >
+          <Settings size={18} />
+        </button>
+      </div>
+
+      {showSettings && (
+        <SettingsModal 
+          onClose={() => setShowSettings(false)}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          onLogout={handleLogout}
+          onChangeBudget={() => setIsEditingBudget(true)}
+        />
+      )}
+
       <div style={{ padding: '20px 0', width: '100%', display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-        {!budget ? (
-          <BudgetSetup onSave={saveBudget} />
+        {(!budget || isEditingBudget) ? (
+          <BudgetSetup onSave={handleSaveBudget} />
         ) : (
           <Dashboard 
             budgetLimit={todayBudget} 
@@ -65,32 +97,21 @@ function App() {
 
   return (
     <div style={{ width: '100%', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px', zIndex: 50 }}>
-        {userId && (
+      {!userId && (
+        <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px', zIndex: 50 }}>
           <button 
-            onClick={handleLogout}
+            onClick={toggleTheme}
             style={{ 
-              background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', 
-              border: 'none', padding: '8px 16px', borderRadius: 'var(--radius-full)',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
-              fontSize: '0.9rem', fontWeight: '500'
+              background: 'var(--panel-track-bg)', color: 'var(--text-primary)', 
+              border: '1px solid var(--surface-border)', padding: '8px', borderRadius: '50%',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}
+            title="Ubah Tema"
           >
-            <LogOut size={16} /> Keluar
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-        )}
-        <button 
-          onClick={toggleTheme}
-          style={{ 
-            background: 'var(--panel-track-bg)', color: 'var(--text-primary)', 
-            border: '1px solid var(--surface-border)', padding: '8px', borderRadius: '50%',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}
-          title="Ubah Tema"
-        >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
-      </div>
+        </div>
+      )}
 
       {!userId ? (
         !showAuth ? (
@@ -99,7 +120,7 @@ function App() {
           <Auth onLoginSuccess={(user) => setUserId(user.id)} />
         )
       ) : (
-        <MainApp userId={userId} />
+        <MainApp userId={userId} theme={theme} toggleTheme={toggleTheme} handleLogout={handleLogout} />
       )}
     </div>
   );
