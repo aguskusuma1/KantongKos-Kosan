@@ -1,17 +1,21 @@
 import React from 'react';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
 
-export default function VisualMeter({ budgetLimit, todaySpent }) {
+export default function VisualMeter({ budgetLimit, todaySpent, isHistory = false }) {
   const isOver = todaySpent > budgetLimit;
   const percentageRaw = budgetLimit > 0 ? (todaySpent / budgetLimit) * 100 : 0;
   const percentage = Math.min(percentageRaw, 100);
   
   // Color logic
   let color = 'var(--success)';
-  let message = 'Pengeluaran aman hari ini!';
+  let message = isHistory ? 'Pengeluaran aman!' : 'Pengeluaran aman hari ini!';
   let Icon = CheckCircle2;
   
-  if (isOver) {
+  if (isHistory && isOver) {
+    color = 'var(--danger)';
+    message = 'Over budget di bulan ini!';
+    Icon = AlertTriangle;
+  } else if (!isHistory && isOver) {
     color = 'var(--danger)';
     message = 'Over budget! Besok jatah akan dikurangi.';
     Icon = AlertTriangle;
@@ -27,7 +31,7 @@ export default function VisualMeter({ budgetLimit, todaySpent }) {
 
   return (
     <div className="glass-panel" style={{ textAlign: 'center', marginBottom: '24px' }}>
-      <h3 style={{ fontSize: '1.2rem', marginBottom: '20px' }}>Budget Hari Ini</h3>
+      <h3 style={{ fontSize: '1.2rem', marginBottom: '20px' }}>{isHistory ? 'Total Pengeluaran' : 'Budget Hari Ini'}</h3>
       
       <div style={{ position: 'relative', width: '160px', height: '160px', margin: '0 auto' }}>
         <svg width="160" height="160" style={{ transform: 'rotate(-90deg)' }}>
@@ -70,7 +74,7 @@ export default function VisualMeter({ budgetLimit, todaySpent }) {
       
       <div style={{ marginTop: '16px' }}>
         <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-          Limit Harian: <strong>Rp {Math.round(budgetLimit).toLocaleString('id-ID')}</strong>
+          {isHistory ? 'Total Budget' : 'Limit Harian'}: <strong>Rp {Math.round(budgetLimit).toLocaleString('id-ID')}</strong>
         </p>
         
         <div style={{ 

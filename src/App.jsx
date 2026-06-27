@@ -17,7 +17,11 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
     todaySpent, 
     saveBudget, 
     addExpense,
-    expenses
+    expenses,
+    selectedDate,
+    nextMonth,
+    prevMonth,
+    isCurrentMonth
   } = useBudget(userId);
 
   if (loading) {
@@ -70,6 +74,10 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
             totalBudget={budget.total_budget}
             expenses={expenses}
             budgetMode={budget.mode}
+            selectedDate={selectedDate}
+            nextMonth={nextMonth}
+            prevMonth={prevMonth}
+            isCurrentMonth={isCurrentMonth}
           />
         )}
       </div>

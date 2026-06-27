@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import VisualMeter from './VisualMeter';
 import ExpenseForm from './ExpenseForm';
 import ExpenseHistory from './ExpenseHistory';
@@ -6,7 +7,16 @@ import FoodRecommendations from './FoodRecommendations';
 import MonthlyChart from './MonthlyChart';
 import WeeklyChart from './WeeklyChart';
 
-export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget, expenses, budgetMode }) {
+export default function Dashboard({ 
+  budgetLimit, todaySpent, onAddExpense, totalBudget, expenses, budgetMode,
+  selectedDate, nextMonth, prevMonth, isCurrentMonth
+}) {
+  const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  const monthName = monthNames[selectedDate.getMonth()];
+  const year = selectedDate.getFullYear();
+  
+  const totalSpentMonth = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+
   return (
     <div className="animate-fade-in" style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
       <header style={{ marginBottom: '24px', textAlign: 'center' }}>
@@ -16,9 +26,26 @@ export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, total
         <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Tanpa Ribet</p>
       </header>
 
-      <VisualMeter budgetLimit={budgetLimit} todaySpent={todaySpent} />
+      {/* Navigasi Bulan */}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+        <button onClick={prevMonth} style={{ background: 'var(--panel-track-bg)', border: 'none', borderRadius: '50%', padding: '8px', cursor: 'pointer', color: 'var(--text-primary)' }}>
+          <ChevronLeft size={20} />
+        </button>
+        <div style={{ fontSize: '1.1rem', fontWeight: '600', minWidth: '120px', textAlign: 'center' }}>
+          {monthName} {year}
+        </div>
+        <button onClick={nextMonth} disabled={isCurrentMonth} style={{ background: 'var(--panel-track-bg)', border: 'none', borderRadius: '50%', padding: '8px', cursor: isCurrentMonth ? 'not-allowed' : 'pointer', color: isCurrentMonth ? 'var(--text-secondary)' : 'var(--text-primary)', opacity: isCurrentMonth ? 0.5 : 1 }}>
+          <ChevronRight size={20} />
+        </button>
+      </div>
+
+      <VisualMeter 
+        budgetLimit={isCurrentMonth ? budgetLimit : totalBudget} 
+        todaySpent={isCurrentMonth ? todaySpent : totalSpentMonth} 
+        isHistory={!isCurrentMonth}
+      />
       
-      <ExpenseForm onAddExpense={onAddExpense} />
+      {isCurrentMonth && <ExpenseForm onAddExpense={onAddExpense} />}
       
       <div style={{ marginTop: '20px', textAlign: 'center' }}>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
