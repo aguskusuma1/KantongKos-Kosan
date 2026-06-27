@@ -6,7 +6,7 @@ import FoodRecommendations from './FoodRecommendations';
 import MonthlyChart from './MonthlyChart';
 import WeeklyChart from './WeeklyChart';
 
-export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget, expenses }) {
+export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget, expenses, budgetMode }) {
   return (
     <div className="animate-fade-in" style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
       <header style={{ marginBottom: '24px', textAlign: 'center' }}>
@@ -22,7 +22,7 @@ export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, total
       
       <div style={{ marginTop: '20px', textAlign: 'center' }}>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-          Total Budget Bulan Ini: Rp {Math.round(totalBudget).toLocaleString('id-ID')}
+          Total Budget {budgetMode === 'mingguan' ? 'Minggu' : 'Bulan'} Ini: Rp {Math.round(totalBudget).toLocaleString('id-ID')}
         </p>
       </div>
 

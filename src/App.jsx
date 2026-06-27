@@ -69,6 +69,7 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
             onAddExpense={addExpense}
             totalBudget={budget.total_budget}
             expenses={expenses}
+            budgetMode={budget.mode}
           />
         )}
       </div>

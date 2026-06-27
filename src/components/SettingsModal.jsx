@@ -46,7 +46,7 @@ export default function SettingsModal({ onClose, theme, toggleTheme, onLogout, o
               border: '1px solid var(--surface-border)', justifyContent: 'flex-start'
             }}
           >
-            <Edit2 size={18} color="var(--primary)" /> Ubah Total Budget Bulanan
+            <Edit2 size={18} color="var(--primary)" /> Ubah Pengaturan Budget
           </button>
 
           {/* Tema */}

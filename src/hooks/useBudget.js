@@ -61,19 +61,41 @@ export function useBudget(userId) {
     .reduce((sum, e) => sum + Number(e.amount), 0);
     
   let todayBudget = 0;
+  let remainingBudgetBeforeToday = 0;
+  let remainingDays = 0;
+  
   if (budget) {
-    const remainingBudgetBeforeToday = budget.total_budget - spentBeforeToday;
-    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-    const currentDay = currentDate.getDate();
-    const remainingDays = daysInMonth - currentDay + 1;
-    todayBudget = Math.max(0, remainingBudgetBeforeToday / remainingDays);
+    if (budget.mode === 'mingguan') {
+      const currLocal = new Date(currentDate.getTime() - (currentDate.getTimezoneOffset() * 60000));
+      const dayOfWeek = currLocal.getUTCDay(); 
+      const diffToMonday = currLocal.getUTCDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+      const startOfWeekDate = new Date(currLocal);
+      startOfWeekDate.setUTCDate(diffToMonday);
+      const startOfWeekStr = startOfWeekDate.toISOString().split('T')[0];
+
+      const spentBeforeTodayInWeek = expenses
+        .filter(e => e.expense_date >= startOfWeekStr && e.expense_date < todayStr)
+        .reduce((sum, e) => sum + Number(e.amount), 0);
+        
+      remainingBudgetBeforeToday = budget.total_budget - spentBeforeTodayInWeek;
+      
+      const currentDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
+      remainingDays = 7 - currentDayOfWeek + 1;
+      todayBudget = Math.max(0, remainingBudgetBeforeToday / remainingDays);
+    } else {
+      remainingBudgetBeforeToday = budget.total_budget - spentBeforeToday;
+      const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+      const currentDay = currentDate.getDate();
+      remainingDays = daysInMonth - currentDay + 1;
+      todayBudget = Math.max(0, remainingBudgetBeforeToday / remainingDays);
+    }
   }
 
-  const saveBudget = async (amount) => {
+  const saveBudget = async (amount, mode = 'bulanan') => {
     try {
       const res = await api.fetch('save_budget', {
         method: 'POST',
-        body: { month_year: currentMonthYear, total_budget: amount }
+        body: { month_year: currentMonthYear, total_budget: amount, mode }
       });
       if (res.data) {
         setBudget(res.data);

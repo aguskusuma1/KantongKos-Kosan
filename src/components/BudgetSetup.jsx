@@ -15,12 +15,8 @@ export default function BudgetSetup({ onSave }) {
     e.preventDefault();
     if (!amount || isNaN(amount) || Number(amount) <= 0) return;
     
-    let finalAmount = Number(amount);
-    if (mode === 'mingguan') {
-      finalAmount = finalAmount * 4; // Asumsi 1 bulan = 4 minggu
-    }
-    
-    onSave(finalAmount);
+    // Pass the raw amount and the selected mode
+    onSave(Number(amount), mode);
   };
 
   return (
@@ -70,7 +66,7 @@ export default function BudgetSetup({ onSave }) {
               <div>
                 <div style={{ fontWeight: '600', fontSize: '1.1rem' }}>Mode Mingguan</div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                  Atur budget per minggu (Sistem akan mengalikan 4)
+                  Atur budget per minggu (Akan direset tiap Senin)
                 </div>
               </div>
             </button>
@@ -94,8 +90,8 @@ export default function BudgetSetup({ onSave }) {
           
           <p style={{ marginBottom: '30px', color: 'var(--text-secondary)' }}>
             {mode === 'mingguan' 
-              ? 'Berapa jatah budget Anda untuk SATU MINGGU? Kami akan mengalikannya menjadi budget sebulan.'
-              : 'Berapa total dana yang Anda miliki untuk BULAN INI? Kami akan membaginya secara otomatis.'}
+              ? 'Berapa jatah budget Anda untuk SATU MINGGU? Jatah harian akan dihitung per minggu dan direset setiap Senin.'
+              : 'Berapa total dana yang Anda miliki untuk BULAN INI? Jatah harian dihitung per bulan.'}
           </p>
           
           <form onSubmit={handleSubmit}>
@@ -115,7 +111,7 @@ export default function BudgetSetup({ onSave }) {
 
             {mode === 'mingguan' && amount && (
               <div style={{ background: 'var(--panel-track-bg)', padding: '12px', borderRadius: 'var(--radius-sm)', marginBottom: '16px', fontSize: '0.9rem' }}>
-                Total sebulan: <strong>Rp {(Number(amount) * 4).toLocaleString('id-ID')}</strong>
+                Budget Anda: <strong>Rp {Number(amount).toLocaleString('id-ID')} / minggu</strong>
               </div>
             )}
 
