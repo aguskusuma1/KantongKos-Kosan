@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 
 export default function ExpenseForm({ onAddExpense }) {
+  const todayStr = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
   const [amount, setAmount] = useState('');
   const [desc, setDesc] = useState('');
+  const [date, setDate] = useState(todayStr);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -11,10 +13,11 @@ export default function ExpenseForm({ onAddExpense }) {
     if (!amount || isNaN(amount) || Number(amount) <= 0) return;
     
     setIsSubmitting(true);
-    await onAddExpense(Number(amount), desc);
+    await onAddExpense(Number(amount), desc, date);
     
     setAmount('');
     setDesc('');
+    setDate(todayStr);
     setIsSubmitting(false);
   };
 
@@ -39,6 +42,16 @@ export default function ExpenseForm({ onAddExpense }) {
             placeholder="Keterangan (Opsional)"
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
+          />
+        </div>
+        <div className="input-group">
+          <input 
+            type="date" 
+            className="input-field" 
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            style={{ color: 'var(--text-primary)' }}
           />
         </div>
         <button 

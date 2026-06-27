@@ -3,6 +3,8 @@ import VisualMeter from './VisualMeter';
 import ExpenseForm from './ExpenseForm';
 import ExpenseHistory from './ExpenseHistory';
 import FoodRecommendations from './FoodRecommendations';
+import MonthlyChart from './MonthlyChart';
+import WeeklyChart from './WeeklyChart';
 
 export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, totalBudget, expenses }) {
   return (
@@ -23,6 +25,10 @@ export default function Dashboard({ budgetLimit, todaySpent, onAddExpense, total
           Total Budget Bulan Ini: Rp {Math.round(totalBudget).toLocaleString('id-ID')}
         </p>
       </div>
+
+      <WeeklyChart expenses={expenses || []} totalBudget={totalBudget} />
+      
+      <MonthlyChart expenses={expenses || []} totalBudget={totalBudget} />
 
       <ExpenseHistory expenses={expenses || []} totalBudget={totalBudget} />
       

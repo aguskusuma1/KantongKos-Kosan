@@ -84,11 +84,11 @@ export function useBudget(userId) {
     }
   };
 
-  const addExpense = async (amount, description) => {
+  const addExpense = async (amount, description, date = todayStr) => {
     try {
       const res = await api.fetch('add_expense', {
         method: 'POST',
-        body: { amount, description, expense_date: todayStr }
+        body: { amount, description, expense_date: date }
       });
       if (res.data) {
         setExpenses([...expenses, res.data]);
