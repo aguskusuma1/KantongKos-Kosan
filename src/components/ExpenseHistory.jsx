@@ -1,12 +1,38 @@
 import React, { useState } from 'react';
-import { Calendar, FileText, Activity } from 'lucide-react';
+import { Calendar, FileText, Activity, Edit2, Trash2, Check, X } from 'lucide-react';
 
-export default function ExpenseHistory({ expenses, totalBudget }) {
+export default function ExpenseHistory({ expenses, totalBudget, onDeleteExpense, onEditExpense }) {
   const today = new Date();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
   
   const [selectedDate, setSelectedDate] = useState(today.toISOString().split('T')[0]);
+  const [editingId, setEditingId] = useState(null);
+  const [editAmount, setEditAmount] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+
+  const handleEditClick = (exp) => {
+    setEditingId(exp.id);
+    setEditAmount(exp.amount);
+    setEditDesc(exp.description);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+  };
+
+  const handleSaveEdit = (id) => {
+    if (onEditExpense && editAmount > 0) {
+      onEditExpense(id, editAmount, editDesc);
+      setEditingId(null);
+    }
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Yakin ingin menghapus pengeluaran ini?')) {
+      if (onDeleteExpense) onDeleteExpense(id);
+    }
+  };
 
   // Helper to get days in month
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -190,22 +216,39 @@ export default function ExpenseHistory({ expenses, totalBudget }) {
 
         {selectedExpenses.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {selectedExpenses.map((exp, idx) => (
-              <div key={idx} style={{ 
-                background: 'var(--panel-bg)', 
-                padding: '12px', 
-                borderRadius: 'var(--radius-sm)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderLeft: '3px solid var(--primary)'
-              }}>
-                <span style={{ fontSize: '0.9rem' }}>{exp.description || 'Pengeluaran'}</span>
-                <span style={{ fontWeight: '600', color: 'var(--danger)' }}>
-                  -Rp {Number(exp.amount).toLocaleString('id-ID')}
-                </span>
-              </div>
-            ))}
+            {selectedExpenses.map((exp, idx) => {
+              if (editingId === exp.id) {
+                return (
+                  <div key={idx} style={{ background: 'var(--panel-bg)', padding: '12px', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--warning)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input type="text" value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Nama Pengeluaran" className="input-field" style={{ padding: '8px', fontSize: '0.9rem' }} />
+                    <input type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)} placeholder="Nominal" className="input-field" style={{ padding: '8px', fontSize: '0.9rem' }} />
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '4px' }}>
+                      <button onClick={handleCancelEdit} style={{ background: 'transparent', border: '1px solid var(--surface-border)', padding: '6px 12px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}><X size={14} /> Batal</button>
+                      <button onClick={() => handleSaveEdit(exp.id)} style={{ background: 'var(--success)', border: 'none', padding: '6px 12px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14} /> Simpan</button>
+                    </div>
+                  </div>
+                );
+              }
+              
+              return (
+                <div key={idx} style={{ 
+                  background: 'var(--panel-bg)', padding: '12px', borderRadius: 'var(--radius-sm)',
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                  borderLeft: '3px solid var(--primary)'
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <span style={{ fontSize: '0.9rem' }}>{exp.description || 'Pengeluaran'}</span>
+                    <span style={{ fontWeight: '600', color: 'var(--danger)' }}>
+                      -Rp {Number(exp.amount).toLocaleString('id-ID')}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button onClick={() => handleEditClick(exp)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}><Edit2 size={16} /></button>
+                    <button onClick={() => handleDelete(exp.id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={16} /></button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div style={{ 

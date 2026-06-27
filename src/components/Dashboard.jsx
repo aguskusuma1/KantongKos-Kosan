@@ -8,7 +8,7 @@ import MonthlyChart from './MonthlyChart';
 import WeeklyChart from './WeeklyChart';
 
 export default function Dashboard({ 
-  budgetLimit, todaySpent, onAddExpense, totalBudget, expenses, budgetMode,
+  budgetLimit, todaySpent, onAddExpense, onDeleteExpense, onEditExpense, totalBudget, expenses, budgetMode,
   selectedDate, nextMonth, prevMonth, isCurrentMonth
 }) {
   const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -57,7 +57,12 @@ export default function Dashboard({
       
       <MonthlyChart expenses={expenses || []} totalBudget={totalBudget} />
 
-      <ExpenseHistory expenses={expenses || []} totalBudget={totalBudget} />
+      <ExpenseHistory 
+        expenses={expenses || []} 
+        totalBudget={totalBudget} 
+        onDeleteExpense={onDeleteExpense}
+        onEditExpense={onEditExpense}
+      />
       
       <FoodRecommendations />
     </div>

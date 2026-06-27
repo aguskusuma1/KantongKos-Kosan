@@ -150,6 +150,34 @@ export function useBudget(userId) {
     }
   };
 
+  const deleteExpense = async (id) => {
+    try {
+      await api.fetch('delete_expense', {
+        method: 'POST',
+        body: { id }
+      });
+      setExpenses(expenses.filter(e => e.id !== id));
+    } catch (error) {
+      console.error(error);
+      alert("Gagal menghapus: " + error.message);
+    }
+  };
+
+  const editExpense = async (id, amount, description) => {
+    try {
+      const res = await api.fetch('edit_expense', {
+        method: 'POST',
+        body: { id, amount, description }
+      });
+      if (res.data) {
+        setExpenses(expenses.map(e => (e.id === id ? res.data : e)));
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Gagal mengubah: " + error.message);
+    }
+  };
+
   return {
     loading,
     budget,
@@ -157,6 +185,8 @@ export function useBudget(userId) {
     todaySpent,
     saveBudget,
     addExpense,
+    deleteExpense,
+    editExpense,
     expenses,
     selectedDate,
     nextMonth,

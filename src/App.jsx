@@ -17,6 +17,8 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
     todaySpent, 
     saveBudget, 
     addExpense,
+    deleteExpense,
+    editExpense,
     expenses,
     selectedDate,
     nextMonth,
@@ -71,6 +73,8 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
             budgetLimit={todayBudget} 
             todaySpent={todaySpent} 
             onAddExpense={addExpense}
+            onDeleteExpense={deleteExpense}
+            onEditExpense={editExpense}
             totalBudget={budget.total_budget}
             expenses={expenses}
             budgetMode={budget.mode}
