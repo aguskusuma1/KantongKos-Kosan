@@ -98,7 +98,7 @@ export default function MonthlyChart({ expenses, totalBudget }) {
                 height: '100px', 
                 display: 'flex', 
                 alignItems: 'flex-end',
-                background: 'rgba(15, 23, 42, 0.2)', // background track
+                background: 'var(--panel-track-bg)', // background track
                 borderRadius: '4px',
                 position: 'relative'
               }}>
@@ -109,7 +109,7 @@ export default function MonthlyChart({ expenses, totalBudget }) {
                   left: 0,
                   right: 0,
                   height: '1px',
-                  background: 'rgba(255,255,255,0.2)',
+                  background: 'var(--surface-border)',
                   zIndex: 1
                 }} />
                 

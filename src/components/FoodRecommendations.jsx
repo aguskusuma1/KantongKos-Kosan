@@ -55,7 +55,7 @@ export default function FoodRecommendations() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {recommendations.map((item) => (
           <div key={item.id} style={{ 
-            background: 'rgba(15, 23, 42, 0.4)', 
+            background: 'var(--panel-bg)',
             padding: '16px', 
             borderRadius: 'var(--radius-sm)',
             borderLeft: `4px solid ${item.color}`,

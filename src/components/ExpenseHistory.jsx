@@ -161,7 +161,7 @@ export default function ExpenseHistory({ expenses, totalBudget }) {
         </div>
 
         {selectedDayObj && (
-          <div style={{ background: 'rgba(15, 23, 42, 0.3)', padding: '16px', borderRadius: 'var(--radius-sm)', marginBottom: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', textAlign: 'center' }}>
+          <div style={{ background: 'var(--panel-item-bg)', padding: '16px', borderRadius: 'var(--radius-sm)', marginBottom: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', textAlign: 'center' }}>
             <div>
               <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Jatah Hari Ini</div>
               <div style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '0.95rem' }}>
@@ -192,7 +192,7 @@ export default function ExpenseHistory({ expenses, totalBudget }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {selectedExpenses.map((exp, idx) => (
               <div key={idx} style={{ 
-                background: 'rgba(15, 23, 42, 0.4)', 
+                background: 'var(--panel-bg)', 
                 padding: '12px', 
                 borderRadius: 'var(--radius-sm)',
                 display: 'flex',
@@ -213,7 +213,7 @@ export default function ExpenseHistory({ expenses, totalBudget }) {
             padding: '20px', 
             color: 'var(--text-secondary)',
             fontSize: '0.9rem',
-            background: 'rgba(15, 23, 42, 0.2)',
+            background: 'var(--panel-track-bg)',
             borderRadius: 'var(--radius-sm)'
           }}>
             Tidak ada catatan pengeluaran di tanggal ini.

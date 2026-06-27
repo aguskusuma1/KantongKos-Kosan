@@ -91,7 +91,7 @@ export default function WeeklyChart({ expenses, totalBudget }) {
                 height: '100%', 
                 display: 'flex', 
                 alignItems: 'flex-end',
-                background: 'rgba(15, 23, 42, 0.2)', // background track
+                background: 'var(--panel-track-bg)', // background track
                 borderRadius: '6px',
                 position: 'relative'
               }}>
@@ -102,7 +102,7 @@ export default function WeeklyChart({ expenses, totalBudget }) {
                   left: -5,
                   right: -5,
                   height: '2px',
-                  background: 'rgba(255,255,255,0.4)',
+                  background: 'var(--surface-border)',
                   zIndex: 3
                 }} />
                 

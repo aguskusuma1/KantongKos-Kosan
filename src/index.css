@@ -18,10 +18,34 @@
   --glass-blur: blur(16px);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   
+  --panel-bg: rgba(15, 23, 42, 0.4);
+  --panel-track-bg: rgba(15, 23, 42, 0.2);
+  --panel-item-bg: rgba(15, 23, 42, 0.3);
+  --input-bg: rgba(15, 23, 42, 0.5);
+  
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
   --radius-full: 9999px;
+}
+
+[data-theme='light'] {
+  --bg-color: #f1f5f9;
+  --surface-color: rgba(255, 255, 255, 0.6);
+  --surface-border: rgba(255, 255, 255, 0.8);
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  
+  --panel-bg: rgba(255, 255, 255, 0.7);
+  --panel-track-bg: rgba(255, 255, 255, 0.4);
+  --panel-item-bg: rgba(255, 255, 255, 0.6);
+  --input-bg: rgba(255, 255, 255, 0.5);
 }
 
 * {
@@ -134,7 +158,7 @@ p {
 }
 
 .input-field {
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--input-bg);
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
   padding: 14px 16px;
