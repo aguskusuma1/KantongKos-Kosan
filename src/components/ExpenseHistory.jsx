@@ -260,9 +260,29 @@ export default function ExpenseHistory({ expenses, totalBudget, onDeleteExpense,
             color: 'var(--text-secondary)',
             fontSize: '0.9rem',
             background: 'var(--panel-track-bg)',
-            borderRadius: 'var(--radius-sm)'
+            borderRadius: 'var(--radius-sm)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            alignItems: 'center'
           }}>
-            Tidak ada catatan pengeluaran di tanggal ini.
+            <div>Tidak ada catatan pengeluaran di tanggal ini.</div>
+            
+            <div style={{ width: '100%', maxWidth: '250px', fontSize: '0.8rem', opacity: 0.7, marginTop: '8px' }}>
+              <div style={{ marginBottom: '8px' }}>Contoh pencatatan:</div>
+              <div style={{ 
+                background: 'var(--panel-bg)', padding: '10px 12px', borderRadius: 'var(--radius-sm)',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                borderLeft: '3px solid var(--primary)',
+                color: 'var(--text-primary)',
+                textAlign: 'left'
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <span>Makan Nasi Jinggo</span>
+                  <span style={{ fontWeight: '600', color: 'var(--danger)' }}>-Rp 10.000</span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
