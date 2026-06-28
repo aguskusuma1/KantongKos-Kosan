@@ -8,7 +8,6 @@ export default function FoodRecommendations() {
   const categories = [
     { id: 'Terdekat', name: 'Terdekat', icon: <MapPin size={24} />, color: '#3b82f6' }, // blue
     { id: 'Terlaris', name: 'Terlaris', icon: <Flame size={24} />, color: '#ef4444' }, // red
-    { id: 'Promo', name: 'Promo Hemat', icon: <Tag size={24} />, color: '#10b981' }, // green
     { id: 'Aneka Nasi', name: 'Aneka Nasi', icon: <Utensils size={24} />, color: '#f59e0b' }, // yellow
     { id: 'Camilan', name: 'Camilan', icon: <ShoppingBag size={24} />, color: '#8b5cf6' }, // purple
     { id: 'Minuman', name: 'Minuman', icon: <Coffee size={24} />, color: '#06b6d4' }, // cyan
@@ -20,10 +19,9 @@ export default function FoodRecommendations() {
       id: 1,
       name: 'Nasi Jinggo Bu Komang',
       price: 'Rp 5.000',
-      discount: 'Rp 4.000',
       location: '0.2 km',
       rating: '4.8',
-      category: ['Terdekat', 'Promo', 'Aneka Nasi'],
+      category: ['Terdekat', 'Aneka Nasi'],
       color: 'var(--success)'
     },
     {
@@ -48,10 +46,9 @@ export default function FoodRecommendations() {
       id: 4,
       name: 'Nasi Goreng Gila',
       price: 'Rp 13.000',
-      discount: 'Rp 10.000',
       location: '1.5 km',
       rating: '4.6',
-      category: ['Promo', 'Terlaris', 'Aneka Nasi'],
+      category: ['Terlaris', 'Aneka Nasi'],
       color: 'var(--danger)'
     },
     {
@@ -162,15 +159,7 @@ export default function FoodRecommendations() {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px' }}>
-              {item.discount ? (
-                <>
-                  <span style={{ fontSize: '0.8rem', textDecoration: 'line-through', color: 'var(--text-secondary)' }}>{item.price}</span>
-                  <span style={{ fontWeight: '700', color: 'var(--success)' }}>{item.discount}</span>
-                  <div style={{ background: 'var(--danger)', color: 'white', fontSize: '0.65rem', padding: '2px 6px', borderRadius: '4px', fontWeight: '700' }}>Promo</div>
-                </>
-              ) : (
-                <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{item.price}</span>
-              )}
+              <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{item.price}</span>
             </div>
           </div>
         ))}
