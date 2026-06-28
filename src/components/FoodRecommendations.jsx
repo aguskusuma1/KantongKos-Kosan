@@ -117,6 +117,86 @@ export default function FoodRecommendations() {
       category: ['Sehat', 'Terdekat'],
       color: 'var(--success)',
       mapQuery: 'Gado Gado Kaliuntu Singaraja'
+    },
+    {
+      id: 11,
+      name: 'Mie Gacoan Singaraja',
+      price: 'Rp 15.000',
+      location: 'Jl. Udayana',
+      rating: '4.9',
+      category: ['Cepat Saji', 'Terlaris'],
+      color: 'var(--danger)',
+      mapQuery: 'Mie Gacoan Singaraja'
+    },
+    {
+      id: 12,
+      name: 'Warung SS (Spesial Sambal)',
+      price: 'Rp 18.000',
+      location: 'Jl. Udayana',
+      rating: '4.8',
+      category: ['Aneka Nasi', 'Terlaris'],
+      color: 'var(--danger)',
+      mapQuery: 'Warung SS Singaraja'
+    },
+    {
+      id: 13,
+      name: 'Mixue Singaraja',
+      price: 'Rp 16.000',
+      location: 'Dekat Kampus',
+      rating: '4.9',
+      category: ['Minuman', 'Camilan', 'Terlaris'],
+      color: 'var(--primary)',
+      mapQuery: 'Mixue Singaraja'
+    },
+    {
+      id: 14,
+      name: 'Warung Muslim Banyuwangi',
+      price: 'Rp 14.000',
+      location: 'Jl. Ahmad Yani',
+      rating: '4.7',
+      category: ['Aneka Nasi', 'Terdekat'],
+      color: 'var(--success)',
+      mapQuery: 'Warung Muslim Banyuwangi Singaraja'
+    },
+    {
+      id: 15,
+      name: 'Sate Madura Cak Udin',
+      price: 'Rp 15.000',
+      location: 'Jl. Pramuka',
+      rating: '4.6',
+      category: ['Camilan', 'Cepat Saji'],
+      color: 'var(--warning)',
+      mapQuery: 'Sate Madura Singaraja'
+    },
+    {
+      id: 16,
+      name: 'Kopi Janji Jiwa',
+      price: 'Rp 20.000',
+      location: 'Jl. Dewi Sartika',
+      rating: '4.8',
+      category: ['Minuman', 'Terdekat'],
+      color: 'var(--primary)',
+      mapQuery: 'Janji Jiwa Singaraja'
+    },
+    {
+      id: 17,
+      name: 'Martabak Sultan',
+      price: 'Rp 25.000',
+      location: 'Kawasan Perkotaan',
+      rating: '4.7',
+      category: ['Camilan'],
+      color: 'var(--warning)',
+      mapQuery: 'Martabak Singaraja'
+    },
+    {
+      id: 18,
+      name: 'Soto Ayam Lamongan',
+      price: 'Rp 15.000',
+      location: 'Jl. Gajah Mada',
+      rating: '4.8',
+      category: ['Aneka Nasi', 'Terdekat'],
+      color: 'var(--success)',
+      mapQuery: 'Soto Ayam Singaraja'
     }
   ];
 
