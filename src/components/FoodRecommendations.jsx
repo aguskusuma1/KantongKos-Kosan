@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star, Leaf } from 'lucide-react';
+import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star, Leaf, X, ExternalLink } from 'lucide-react';
 
 export default function FoodRecommendations() {
   const [activeCategory, setActiveCategory] = useState('Terdekat');
+  const [selectedFood, setSelectedFood] = useState(null);
 
   // Gojek-style categories with icons
   const categories = [
@@ -18,147 +19,103 @@ export default function FoodRecommendations() {
   const recommendations = [
     {
       id: 1,
-      name: 'Nasi Jinggo Bu Komang',
-      price: 'Rp 5.000',
-      location: '0.2 km',
+      name: 'Warung Makan Budi (Ayam Guling)',
+      price: 'Rp 15.000',
+      location: 'Jl. Surapati',
       rating: '4.8',
-      category: ['Terdekat', 'Aneka Nasi'],
-      color: 'var(--success)'
+      category: ['Terdekat', 'Aneka Nasi', 'Terlaris'],
+      color: 'var(--success)',
+      mapQuery: 'Warung Makan Budi Singaraja'
     },
     {
       id: 2,
-      name: 'Lalapan Ayam Mas Budi',
-      price: 'Rp 15.000',
-      location: '1.2 km',
+      name: 'Nasi Jongor Pak Terang',
+      price: 'Rp 10.000',
+      location: 'Area Kampus Bawah',
       rating: '4.9',
-      category: ['Terlaris', 'Aneka Nasi'],
-      color: 'var(--primary)'
+      category: ['Terlaris', 'Aneka Nasi', 'Cepat Saji'],
+      color: 'var(--primary)',
+      mapQuery: 'Nasi Jongor Singaraja'
     },
     {
       id: 3,
-      name: 'Es Kopi Susu Senja',
-      price: 'Rp 12.000',
-      location: '0.5 km',
+      name: 'Danke Cafe',
+      price: 'Rp 18.000',
+      location: 'Jl. Udayana',
       rating: '4.7',
       category: ['Minuman', 'Terdekat'],
-      color: 'var(--warning)'
+      color: 'var(--warning)',
+      mapQuery: 'Danke Cafe Singaraja'
     },
     {
       id: 4,
-      name: 'Nasi Goreng Gila',
-      price: 'Rp 13.000',
-      location: '1.5 km',
+      name: 'Gelato Corner',
+      price: 'Rp 15.000',
+      location: 'Jl. Udayana No.11A',
       rating: '4.6',
-      category: ['Terlaris', 'Aneka Nasi'],
-      color: 'var(--danger)'
+      category: ['Camilan', 'Terdekat'],
+      color: 'var(--primary)',
+      mapQuery: 'Gelato Corner Singaraja'
     },
     {
       id: 5,
-      name: 'Siomay & Batagor Kang Cepot',
-      price: 'Rp 10.000',
-      location: '0.8 km',
+      name: 'Kedai Radja Ketjil',
+      price: 'Rp 20.000',
+      location: 'Jl. Lely No. 10',
       rating: '4.8',
-      category: ['Camilan', 'Terlaris'],
-      color: 'var(--success)'
+      category: ['Camilan', 'Minuman', 'Terlaris'],
+      color: 'var(--success)',
+      mapQuery: 'Kedai Radja Ketjil Singaraja'
     },
     {
       id: 6,
-      name: 'Burger & Fries Makmur',
-      price: 'Rp 25.000',
-      location: '2.0 km',
+      name: 'Kedai 82',
+      price: 'Rp 16.000',
+      location: 'Jl. Gajah Mada No. 1',
       rating: '4.5',
-      category: ['Cepat Saji'],
-      color: 'var(--danger)'
+      category: ['Cepat Saji', 'Aneka Nasi'],
+      color: 'var(--danger)',
+      mapQuery: 'Kedai 82 Singaraja'
     },
     {
       id: 7,
-      name: 'Sate Taichan Senayan',
+      name: 'Warung Made Anggrek',
       price: 'Rp 20.000',
-      location: '1.8 km',
+      location: 'Jl. Anggrek No. 36',
       rating: '4.9',
-      category: ['Camilan', 'Terlaris'],
-      color: 'var(--danger)'
+      category: ['Aneka Nasi', 'Terlaris'],
+      color: 'var(--danger)',
+      mapQuery: 'Warung Made Anggrek Singaraja'
     },
     {
       id: 8,
       name: 'Ayam Geprek Nelongso',
       price: 'Rp 15.000',
-      location: '0.5 km',
+      location: 'Dekat Undiksha',
       rating: '4.8',
       category: ['Aneka Nasi', 'Cepat Saji', 'Terdekat'],
-      color: 'var(--warning)'
+      color: 'var(--warning)',
+      mapQuery: 'Ayam Geprek Nelongso Singaraja'
     },
     {
       id: 9,
-      name: 'Teh Poci Spesial',
-      price: 'Rp 5.000',
-      location: '0.1 km',
-      rating: '4.7',
-      category: ['Minuman', 'Terdekat'],
-      color: 'var(--success)'
+      name: 'Salad Sayur Fresh',
+      price: 'Rp 20.000',
+      location: 'Jl. Ahmad Yani',
+      rating: '4.8',
+      category: ['Sehat'],
+      color: 'var(--success)',
+      mapQuery: 'Salad Sayur Singaraja'
     },
     {
       id: 10,
-      name: 'Pisang Goreng Keju Baper',
-      price: 'Rp 12.000',
-      location: '1.0 km',
-      rating: '4.6',
-      category: ['Camilan', 'Terlaris'],
-      color: 'var(--primary)'
-    },
-    {
-      id: 11,
-      name: 'Boba Time',
-      price: 'Rp 18.000',
-      location: '1.2 km',
-      rating: '4.8',
-      category: ['Minuman', 'Terlaris'],
-      color: 'var(--primary)'
-    },
-    {
-      id: 12,
-      name: 'Nasi Padang Uda Buyung',
-      price: 'Rp 16.000',
-      location: '0.7 km',
-      rating: '4.9',
-      category: ['Aneka Nasi', 'Terlaris'],
-      color: 'var(--warning)'
-    },
-    {
-      id: 13,
-      name: 'Salad Sayur Fresh',
-      price: 'Rp 20.000',
-      location: '1.5 km',
-      rating: '4.8',
-      category: ['Sehat'],
-      color: 'var(--success)'
-    },
-    {
-      id: 14,
       name: 'Gado-Gado Bu Ning',
       price: 'Rp 12.000',
-      location: '0.4 km',
+      location: 'Kaliuntu',
       rating: '4.7',
       category: ['Sehat', 'Terdekat'],
-      color: 'var(--success)'
-    },
-    {
-      id: 15,
-      name: 'Jus Alpukat & Buah Naga',
-      price: 'Rp 10.000',
-      location: '0.6 km',
-      rating: '4.9',
-      category: ['Sehat', 'Minuman', 'Terlaris'],
-      color: 'var(--primary)'
-    },
-    {
-      id: 16,
-      name: 'Oatmeal Buah Madu',
-      price: 'Rp 18.000',
-      location: '1.2 km',
-      rating: '4.6',
-      category: ['Sehat', 'Camilan'],
-      color: 'var(--warning)'
+      color: 'var(--success)',
+      mapQuery: 'Gado Gado Kaliuntu Singaraja'
     }
   ];
 
@@ -225,15 +182,31 @@ export default function FoodRecommendations() {
       {/* List Makanan */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {filteredRecommendations.map((item) => (
-          <div key={item.id} className="animate-fade-in" style={{ 
-            background: 'var(--panel-bg)',
-            padding: '16px', 
-            borderRadius: 'var(--radius-sm)',
-            borderLeft: `4px solid ${item.color}`,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px'
-          }}>
+          <div 
+            key={item.id} 
+            className="animate-fade-in" 
+            onClick={() => setSelectedFood(item)}
+            style={{ 
+              background: 'var(--panel-bg)',
+              padding: '16px', 
+              borderRadius: 'var(--radius-sm)',
+              borderLeft: `4px solid ${item.color}`,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              cursor: 'pointer',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'none';
+              e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
                 <h3 style={{ fontSize: '1.05rem', margin: '0 0 4px 0', fontWeight: '700' }}>{item.name}</h3>
@@ -255,6 +228,103 @@ export default function FoodRecommendations() {
           </div>
         ))}
       </div>
+    </div>
+      
+      {/* Modal Detail Peta */}
+      {selectedFood && (
+        <div 
+          className="animate-fade-in"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 9999,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '20px'
+          }}
+          onClick={() => setSelectedFood(null)}
+        >
+          <div 
+            style={{
+              background: 'var(--panel-bg)',
+              width: '100%',
+              maxWidth: '450px',
+              borderRadius: 'var(--radius-md)',
+              overflow: 'hidden',
+              boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+            onClick={e => e.stopPropagation()} // Mencegah klik dalam modal menutup modal
+          >
+            {/* Modal Header */}
+            <div style={{ 
+              padding: '16px 20px', 
+              borderBottom: '1px solid var(--surface-border)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{selectedFood.name}</h3>
+              <button 
+                onClick={() => setSelectedFood(null)}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
+              >
+                <X size={24} />
+              </button>
+            </div>
+            
+            {/* Modal Body - Map */}
+            <div style={{ width: '100%', height: '250px', background: '#e5e7eb', position: 'relative' }}>
+              <iframe
+                title="Google Maps"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedFood.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+              ></iframe>
+            </div>
+
+            {/* Modal Footer */}
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                <MapPin size={16} />
+                <span>{selectedFood.location}</span>
+              </div>
+              
+              <a 
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedFood.mapQuery)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  background: 'var(--primary)',
+                  color: 'white',
+                  textDecoration: 'none',
+                  padding: '12px',
+                  borderRadius: 'var(--radius-sm)',
+                  fontWeight: '600',
+                  fontSize: '0.95rem'
+                }}
+              >
+                <ExternalLink size={18} />
+                Buka di Google Maps
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
