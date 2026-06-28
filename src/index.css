@@ -225,23 +225,22 @@ p {
 
 @media (min-width: 900px) {
   .dashboard-layout {
-    max-width: 1100px;
+    max-width: 600px;
     padding: 20px;
   }
   .dashboard-header {
     margin-bottom: 40px;
   }
   .dashboard-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 }
 
 .app-container {
   width: 100%;
-  max-width: 1100px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 10px 20px;
   box-sizing: border-box;
