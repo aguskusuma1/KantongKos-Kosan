@@ -68,6 +68,60 @@ export default function FoodRecommendations() {
       rating: '4.5',
       category: ['Cepat Saji'],
       color: 'var(--danger)'
+    },
+    {
+      id: 7,
+      name: 'Sate Taichan Senayan',
+      price: 'Rp 20.000',
+      location: '1.8 km',
+      rating: '4.9',
+      category: ['Camilan', 'Terlaris'],
+      color: 'var(--danger)'
+    },
+    {
+      id: 8,
+      name: 'Ayam Geprek Nelongso',
+      price: 'Rp 15.000',
+      location: '0.5 km',
+      rating: '4.8',
+      category: ['Aneka Nasi', 'Cepat Saji', 'Terdekat'],
+      color: 'var(--warning)'
+    },
+    {
+      id: 9,
+      name: 'Teh Poci Spesial',
+      price: 'Rp 5.000',
+      location: '0.1 km',
+      rating: '4.7',
+      category: ['Minuman', 'Terdekat'],
+      color: 'var(--success)'
+    },
+    {
+      id: 10,
+      name: 'Pisang Goreng Keju Baper',
+      price: 'Rp 12.000',
+      location: '1.0 km',
+      rating: '4.6',
+      category: ['Camilan', 'Terlaris'],
+      color: 'var(--primary)'
+    },
+    {
+      id: 11,
+      name: 'Boba Time',
+      price: 'Rp 18.000',
+      location: '1.2 km',
+      rating: '4.8',
+      category: ['Minuman', 'Terlaris'],
+      color: 'var(--primary)'
+    },
+    {
+      id: 12,
+      name: 'Nasi Padang Uda Buyung',
+      price: 'Rp 16.000',
+      location: '0.7 km',
+      rating: '4.9',
+      category: ['Aneka Nasi', 'Terlaris'],
+      color: 'var(--warning)'
     }
   ];
 
@@ -77,7 +131,7 @@ export default function FoodRecommendations() {
     <div className="glass-panel animate-fade-in" style={{ marginTop: '24px', padding: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
         <Utensils size={20} color="var(--primary)" />
-        <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Gofood Kos-kosan</h2>
+        <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Rekomendasi Menu</h2>
       </div>
 
       {/* Kategori Gojek Style (Grid/Scrollable) */}
