@@ -226,6 +226,9 @@ export default function FoodRecommendations() {
               <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{item.price}</span>
             </div>
           </div>
+        ))}
+      </div>
+
       {/* Modal Detail Peta */}
       {selectedFood && (
         <div 
