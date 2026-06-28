@@ -203,6 +203,18 @@ p {
   width: 100%;
   max-width: 450px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-header {
+  margin-bottom: 24px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .dashboard-left, .dashboard-right {
@@ -213,11 +225,16 @@ p {
 
 @media (min-width: 900px) {
   .dashboard-layout {
-    max-width: 1000px;
+    max-width: 1100px;
+    padding: 20px;
+  }
+  .dashboard-header {
+    margin-bottom: 40px;
+  }
+  .dashboard-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: start;
-    padding: 0;
   }
 }

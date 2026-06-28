@@ -19,13 +19,15 @@ export default function Dashboard({
 
   return (
     <div className="animate-fade-in dashboard-layout">
-      <div className="dashboard-left">
-        <header style={{ textAlign: 'center' }}>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: '700', background: 'linear-gradient(to right, #60a5fa, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            Auto-Budgeting
-          </h1>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Tanpa Ribet</p>
-        </header>
+      <header className="dashboard-header" style={{ textAlign: 'center' }}>
+        <h1 style={{ fontSize: '1.8rem', fontWeight: '700', background: 'linear-gradient(to right, #60a5fa, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Auto-Budgeting
+        </h1>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Tanpa Ribet</p>
+      </header>
+      
+      <div className="dashboard-content">
+        <div className="dashboard-left">
 
       {/* Navigasi Bulan */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px' }}>
@@ -68,6 +70,7 @@ export default function Dashboard({
         />
         
         <FoodRecommendations />
+      </div>
       </div>
     </div>
   );
