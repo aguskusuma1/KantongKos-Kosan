@@ -22,9 +22,12 @@ export default function ExpenseHistory({ expenses, totalBudget, onDeleteExpense,
   };
 
   const handleSaveEdit = (id) => {
-    if (onEditExpense && editAmount > 0) {
-      onEditExpense(id, editAmount, editDesc);
+    const numAmount = Number(editAmount);
+    if (onEditExpense && numAmount > 0) {
+      onEditExpense(id, numAmount, editDesc);
       setEditingId(null);
+    } else {
+      alert("Nominal tidak valid! Pastikan Anda memasukkan angka lebih dari 0.");
     }
   };
 

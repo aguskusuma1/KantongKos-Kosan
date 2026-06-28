@@ -170,7 +170,7 @@ export function useBudget(userId) {
         body: { id, amount, description }
       });
       if (res.data) {
-        setExpenses(expenses.map(e => (e.id === id ? res.data : e)));
+        setExpenses(prev => prev.map(e => (e.id == id ? res.data : e)));
       }
     } catch (error) {
       console.error(error);
