@@ -240,7 +240,8 @@ export default function FoodRecommendations() {
             width: '100vw',
             height: '100vh',
             background: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(4px)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             zIndex: 9999,
             display: 'flex',
             justifyContent: 'center',
@@ -253,32 +254,19 @@ export default function FoodRecommendations() {
             style={{
               background: 'var(--panel-bg)',
               width: '100%',
-              maxWidth: '450px',
-              borderRadius: 'var(--radius-md)',
+              maxWidth: '400px',
+              borderRadius: '24px',
+              border: '1px solid var(--surface-border)',
               overflow: 'hidden',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              position: 'relative'
             }}
             onClick={e => e.stopPropagation()}
           >
-            <div style={{ 
-              padding: '16px 20px', 
-              borderBottom: '1px solid var(--surface-border)',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}>
-              <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{selectedFood.name}</h3>
-              <button 
-                onClick={() => setSelectedFood(null)}
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
-              >
-                <X size={24} />
-              </button>
-            </div>
-            
-            <div style={{ width: '100%', height: '250px', background: '#e5e7eb', position: 'relative' }}>
+            {/* Modal Body - Map (At the top) */}
+            <div style={{ width: '100%', height: '220px', background: 'var(--panel-track-bg)', position: 'relative' }}>
               <iframe
                 title="Google Maps"
                 width="100%"
@@ -288,12 +276,57 @@ export default function FoodRecommendations() {
                 allowFullScreen
                 src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedFood.mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
               ></iframe>
+              <button 
+                onClick={() => setSelectedFood(null)}
+                style={{ 
+                  position: 'absolute', 
+                  top: '12px', 
+                  right: '12px',
+                  background: 'var(--panel-bg)', 
+                  border: 'none', 
+                  cursor: 'pointer', 
+                  color: 'var(--text-primary)',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                }}
+              >
+                <X size={18} />
+              </button>
             </div>
 
-            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                <MapPin size={16} />
-                <span>{selectedFood.location}</span>
+            {/* Modal Info */}
+            <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--text-primary)', fontWeight: '700', lineHeight: '1.3' }}>
+                    {selectedFood.name}
+                  </h3>
+                  <div style={{ 
+                    background: 'var(--panel-track-bg)', 
+                    color: 'var(--text-primary)', 
+                    padding: '4px 10px', 
+                    borderRadius: '20px', 
+                    fontSize: '0.85rem', 
+                    fontWeight: '700'
+                  }}>
+                    {selectedFood.price}
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#f59e0b', fontWeight: '600' }}>
+                    <Star size={14} fill="#f59e0b" /> {selectedFood.rating}
+                  </span>
+                  <span>•</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <MapPin size={14} /> {selectedFood.location}
+                  </span>
+                </div>
               </div>
               
               <a 
@@ -308,11 +341,18 @@ export default function FoodRecommendations() {
                   background: 'var(--primary)',
                   color: 'white',
                   textDecoration: 'none',
-                  padding: '12px',
-                  borderRadius: 'var(--radius-sm)',
+                  padding: '14px',
+                  borderRadius: '16px',
                   fontWeight: '600',
-                  fontSize: '0.95rem'
+                  fontSize: '1rem',
+                  marginTop: '8px',
+                  transition: 'background 0.2s ease, transform 0.1s ease',
+                  boxShadow: '0 4px 14px rgba(59, 130, 246, 0.4)'
                 }}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
+                onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
               >
                 <ExternalLink size={18} />
                 Buka di Google Maps
