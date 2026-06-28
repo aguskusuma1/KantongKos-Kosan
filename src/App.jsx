@@ -40,7 +40,7 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div className="app-container">
       <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px' }}>
         <button 
           onClick={() => setShowSettings(true)}
@@ -109,7 +109,7 @@ function App() {
   };
 
   return (
-    <div style={{ width: '100%' }}>
+    <div className="app-container">
       {!userId && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px' }}>
           <button 
