@@ -105,7 +105,7 @@ export default function WeeklyReport({ expenses }) {
     <div className="glass-panel animate-fade-in" style={{ padding: '20px', marginTop: '24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', borderBottom: '1px solid var(--surface-border)', paddingBottom: '12px' }}>
         <Brain size={20} color="var(--primary)" />
-        <h2 style={{ fontSize: '1.2rem', margin: 0, fontWeight: '600' }}>AI Insight: Laporan 7 Hari</h2>
+        <h2 style={{ fontSize: '1.2rem', margin: 0, fontWeight: '600' }}>Laporan 7 Hari</h2>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
