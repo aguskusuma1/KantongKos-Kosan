@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Utensils, MapPin, Tag } from 'lucide-react';
 
 export default function FoodRecommendations() {
+  const [activeCategory, setActiveCategory] = useState('Semua');
+
   const recommendations = [
     {
       id: 1,
@@ -9,7 +11,7 @@ export default function FoodRecommendations() {
       warung: 'Warung Bu Komang',
       price: 'Rp 5.000',
       location: 'Jl. Udayana (Depan Kampus)',
-      category: 'Sarapan / Malam',
+      category: 'Sarapan',
       color: 'var(--success)'
     },
     {
@@ -36,10 +38,34 @@ export default function FoodRecommendations() {
       warung: 'Mie Ayam Pak Min',
       price: 'Rp 10.000',
       location: 'Jl. Sudirman',
-      category: 'Kapan Saja',
+      category: 'Makan Siang',
+      color: 'var(--primary)'
+    },
+    {
+      id: 5,
+      name: 'Soto Ayam',
+      warung: 'Soto Ibu Siti',
+      price: 'Rp 12.000',
+      location: 'Jl. Kartini',
+      category: 'Sarapan',
+      color: 'var(--success)'
+    },
+    {
+      id: 6,
+      name: 'Nasi Goreng Spesial',
+      warung: 'Nasi Goreng Pak Kumis',
+      price: 'Rp 13.000',
+      location: 'Jl. Mayor Metra',
+      category: 'Makan Malam',
       color: 'var(--danger)'
     }
   ];
+
+  const categories = ['Semua', 'Sarapan', 'Makan Siang', 'Makan Malam'];
+
+  const filteredRecommendations = activeCategory === 'Semua' 
+    ? recommendations 
+    : recommendations.filter(item => item.category === activeCategory);
 
   return (
     <div className="glass-panel animate-fade-in" style={{ marginTop: '24px', padding: '20px' }}>
@@ -48,13 +74,43 @@ export default function FoodRecommendations() {
         <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Rekomendasi Menu Kos</h2>
       </div>
       
-      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
         Pilihan makanan hemat bersahabat dengan kantong mahasiswa.
       </p>
 
+      <div style={{ 
+        display: 'flex', 
+        gap: '8px', 
+        overflowX: 'auto', 
+        paddingBottom: '12px',
+        marginBottom: '12px',
+        scrollbarWidth: 'none' // Hide scrollbar for Firefox
+      }}>
+        {categories.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            style={{
+              background: activeCategory === cat ? 'var(--primary)' : 'var(--panel-track-bg)',
+              color: activeCategory === cat ? 'white' : 'var(--text-primary)',
+              border: 'none',
+              padding: '6px 16px',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.85rem',
+              fontWeight: activeCategory === cat ? '600' : '500',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {recommendations.map((item) => (
-          <div key={item.id} style={{ 
+        {filteredRecommendations.map((item) => (
+          <div key={item.id} className="animate-fade-in" style={{ 
             background: 'var(--panel-bg)',
             padding: '16px', 
             borderRadius: 'var(--radius-sm)',
