@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star, Leaf, X, ExternalLink } from 'lucide-react';
+import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star, Leaf, X, ExternalLink, BadgeCheck } from 'lucide-react';
 
 export default function FoodRecommendations() {
   const [activeCategory, setActiveCategory] = useState('Terdekat');
@@ -14,6 +14,7 @@ export default function FoodRecommendations() {
     { id: 'Camilan', name: 'Camilan', icon: <ShoppingBag size={24} />, color: '#8b5cf6' }, // purple
     { id: 'Minuman', name: 'Minuman', icon: <Coffee size={24} />, color: '#06b6d4' }, // cyan
     { id: 'Sehat', name: 'Menu Sehat', icon: <Leaf size={24} />, color: '#22c55e' }, // green
+    { id: 'Halal', name: 'Menu Halal', icon: <BadgeCheck size={24} />, color: '#14b8a6' }, // teal
     { id: 'Cepat Saji', name: 'Cepat Saji', icon: <Pizza size={24} />, color: '#f97316' }, // orange
   ];
 
@@ -94,7 +95,7 @@ export default function FoodRecommendations() {
       price: 'Rp 15.000',
       location: 'Dekat Undiksha',
       rating: '4.8',
-      category: ['Aneka Nasi', 'Cepat Saji', 'Terdekat'],
+      category: ['Aneka Nasi', 'Cepat Saji', 'Terdekat', 'Halal'],
       color: 'var(--warning)',
       mapQuery: 'Ayam Geprek Nelongso Singaraja'
     },
@@ -104,7 +105,7 @@ export default function FoodRecommendations() {
       price: 'Rp 20.000',
       location: 'Jl. Ahmad Yani',
       rating: '4.8',
-      category: ['Sehat'],
+      category: ['Sehat', 'Halal'],
       color: 'var(--success)',
       mapQuery: 'Salad Sayur Singaraja'
     },
@@ -114,7 +115,7 @@ export default function FoodRecommendations() {
       price: 'Rp 12.000',
       location: 'Kaliuntu',
       rating: '4.7',
-      category: ['Sehat', 'Terdekat'],
+      category: ['Sehat', 'Terdekat', 'Halal'],
       color: 'var(--success)',
       mapQuery: 'Gado Gado Kaliuntu Singaraja'
     },
@@ -124,7 +125,7 @@ export default function FoodRecommendations() {
       price: 'Rp 15.000',
       location: 'Jl. Udayana',
       rating: '4.9',
-      category: ['Cepat Saji', 'Terlaris'],
+      category: ['Cepat Saji', 'Terlaris', 'Halal'],
       color: 'var(--danger)',
       mapQuery: 'Mie Gacoan Singaraja'
     },
@@ -134,7 +135,7 @@ export default function FoodRecommendations() {
       price: 'Rp 18.000',
       location: 'Jl. Udayana',
       rating: '4.8',
-      category: ['Aneka Nasi', 'Terlaris'],
+      category: ['Aneka Nasi', 'Terlaris', 'Halal'],
       color: 'var(--danger)',
       mapQuery: 'Warung SS Singaraja'
     },
@@ -144,7 +145,7 @@ export default function FoodRecommendations() {
       price: 'Rp 16.000',
       location: 'Dekat Kampus',
       rating: '4.9',
-      category: ['Minuman', 'Camilan', 'Terlaris'],
+      category: ['Minuman', 'Camilan', 'Terlaris', 'Halal'],
       color: 'var(--primary)',
       mapQuery: 'Mixue Singaraja'
     },
@@ -154,7 +155,7 @@ export default function FoodRecommendations() {
       price: 'Rp 14.000',
       location: 'Jl. Ahmad Yani',
       rating: '4.7',
-      category: ['Aneka Nasi', 'Terdekat'],
+      category: ['Aneka Nasi', 'Terdekat', 'Halal'],
       color: 'var(--success)',
       mapQuery: 'Warung Muslim Banyuwangi Singaraja'
     },
@@ -164,7 +165,7 @@ export default function FoodRecommendations() {
       price: 'Rp 15.000',
       location: 'Jl. Pramuka',
       rating: '4.6',
-      category: ['Camilan', 'Cepat Saji'],
+      category: ['Camilan', 'Cepat Saji', 'Halal'],
       color: 'var(--warning)',
       mapQuery: 'Sate Madura Singaraja'
     },
@@ -174,7 +175,7 @@ export default function FoodRecommendations() {
       price: 'Rp 20.000',
       location: 'Jl. Dewi Sartika',
       rating: '4.8',
-      category: ['Minuman', 'Terdekat'],
+      category: ['Minuman', 'Terdekat', 'Halal'],
       color: 'var(--primary)',
       mapQuery: 'Janji Jiwa Singaraja'
     },
@@ -184,7 +185,7 @@ export default function FoodRecommendations() {
       price: 'Rp 25.000',
       location: 'Kawasan Perkotaan',
       rating: '4.7',
-      category: ['Camilan'],
+      category: ['Camilan', 'Halal'],
       color: 'var(--warning)',
       mapQuery: 'Martabak Singaraja'
     },
@@ -194,7 +195,7 @@ export default function FoodRecommendations() {
       price: 'Rp 15.000',
       location: 'Jl. Gajah Mada',
       rating: '4.8',
-      category: ['Aneka Nasi', 'Terdekat'],
+      category: ['Aneka Nasi', 'Terdekat', 'Halal'],
       color: 'var(--success)',
       mapQuery: 'Soto Ayam Singaraja'
     },
@@ -204,7 +205,7 @@ export default function FoodRecommendations() {
       price: 'Rp 10.000',
       location: 'Senggol Jl. Udayana (Sebelah Kampus)',
       rating: '4.7',
-      category: ['Aneka Nasi', 'Terdekat'],
+      category: ['Aneka Nasi', 'Terdekat', 'Halal'],
       color: 'var(--success)',
       mapQuery: 'Dapur Rizkiyah Singaraja'
     },
@@ -214,7 +215,7 @@ export default function FoodRecommendations() {
       price: 'Rp 15.000',
       location: 'Jl. Udayana',
       rating: '4.8',
-      category: ['Cepat Saji', 'Terdekat'],
+      category: ['Cepat Saji', 'Terdekat', 'Halal'],
       color: 'var(--warning)',
       mapQuery: 'Bakmi Ayam Gembira Singaraja'
     },
@@ -234,9 +235,49 @@ export default function FoodRecommendations() {
       price: 'Rp 12.000',
       location: 'Jl. Udayana (Depan Kantor Pajak)',
       rating: '4.6',
-      category: ['Aneka Nasi', 'Terdekat'],
+      category: ['Aneka Nasi', 'Terdekat', 'Halal'],
       color: 'var(--primary)',
       mapQuery: 'Warung Kayana Singaraja'
+    },
+    {
+      id: 23,
+      name: 'Jus Buah Segar Udayana',
+      price: 'Rp 10.000',
+      location: 'Jl. Udayana',
+      rating: '4.9',
+      category: ['Sehat', 'Minuman', 'Halal', 'Terdekat'],
+      color: 'var(--primary)',
+      mapQuery: 'Jus Buah Segar Singaraja'
+    },
+    {
+      id: 24,
+      name: 'Bubur Kacang Hijau Madura',
+      price: 'Rp 8.000',
+      location: 'Jl. Dewi Sartika',
+      rating: '4.7',
+      category: ['Sehat', 'Camilan', 'Halal'],
+      color: 'var(--warning)',
+      mapQuery: 'Bubur Kacang Hijau Singaraja'
+    },
+    {
+      id: 25,
+      name: 'Pecel Lele Madiun',
+      price: 'Rp 14.000',
+      location: 'Jl. Ahmad Yani',
+      rating: '4.8',
+      category: ['Aneka Nasi', 'Halal'],
+      color: 'var(--danger)',
+      mapQuery: 'Pecel Lele Singaraja'
+    },
+    {
+      id: 26,
+      name: 'Nasi Padang Uda Minang',
+      price: 'Rp 16.000',
+      location: 'Dekat Undiksha',
+      rating: '4.9',
+      category: ['Aneka Nasi', 'Halal', 'Terlaris'],
+      color: 'var(--success)',
+      mapQuery: 'Nasi Padang Singaraja'
     }
   ];
 
