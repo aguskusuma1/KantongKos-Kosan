@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star } from 'lucide-react';
+import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star, Leaf } from 'lucide-react';
 
 export default function FoodRecommendations() {
   const [activeCategory, setActiveCategory] = useState('Terdekat');
@@ -11,6 +11,7 @@ export default function FoodRecommendations() {
     { id: 'Aneka Nasi', name: 'Aneka Nasi', icon: <Utensils size={24} />, color: '#f59e0b' }, // yellow
     { id: 'Camilan', name: 'Camilan', icon: <ShoppingBag size={24} />, color: '#8b5cf6' }, // purple
     { id: 'Minuman', name: 'Minuman', icon: <Coffee size={24} />, color: '#06b6d4' }, // cyan
+    { id: 'Sehat', name: 'Menu Sehat', icon: <Leaf size={24} />, color: '#22c55e' }, // green
     { id: 'Cepat Saji', name: 'Cepat Saji', icon: <Pizza size={24} />, color: '#f97316' }, // orange
   ];
 
@@ -121,6 +122,42 @@ export default function FoodRecommendations() {
       location: '0.7 km',
       rating: '4.9',
       category: ['Aneka Nasi', 'Terlaris'],
+      color: 'var(--warning)'
+    },
+    {
+      id: 13,
+      name: 'Salad Sayur Fresh',
+      price: 'Rp 20.000',
+      location: '1.5 km',
+      rating: '4.8',
+      category: ['Sehat'],
+      color: 'var(--success)'
+    },
+    {
+      id: 14,
+      name: 'Gado-Gado Bu Ning',
+      price: 'Rp 12.000',
+      location: '0.4 km',
+      rating: '4.7',
+      category: ['Sehat', 'Terdekat'],
+      color: 'var(--success)'
+    },
+    {
+      id: 15,
+      name: 'Jus Alpukat & Buah Naga',
+      price: 'Rp 10.000',
+      location: '0.6 km',
+      rating: '4.9',
+      category: ['Sehat', 'Minuman', 'Terlaris'],
+      color: 'var(--primary)'
+    },
+    {
+      id: 16,
+      name: 'Oatmeal Buah Madu',
+      price: 'Rp 18.000',
+      location: '1.2 km',
+      rating: '4.6',
+      category: ['Sehat', 'Camilan'],
       color: 'var(--warning)'
     }
   ];
