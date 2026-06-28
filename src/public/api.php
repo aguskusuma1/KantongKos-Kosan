@@ -128,4 +128,35 @@ if ($action === 'add_expense') {
     exit;
 }
 
+if ($action === 'delete_expense') {
+    $id = $input['id'] ?? null;
+    if ($id) {
+        $stmt = $pdo->prepare("DELETE FROM expenses WHERE id = ? AND user_id = ?");
+        $stmt->execute([$id, $user_id]);
+        echo json_encode(["message" => "Pengeluaran berhasil dihapus"]);
+        exit;
+    }
+    echo json_encode(["error" => "ID tidak valid"]);
+    exit;
+}
+
+if ($action === 'edit_expense') {
+    $id = $input['id'] ?? null;
+    $amount = $input['amount'] ?? 0;
+    $description = $input['description'] ?? '';
+    
+    if ($id) {
+        $stmt = $pdo->prepare("UPDATE expenses SET amount = ?, description = ? WHERE id = ? AND user_id = ?");
+        $stmt->execute([$amount, $description, $id, $user_id]);
+        
+        $stmt = $pdo->prepare("SELECT * FROM expenses WHERE id = ?");
+        $stmt->execute([$id]);
+        $expense = $stmt->fetch(PDO::FETCH_ASSOC);
+        echo json_encode(["data" => $expense]);
+        exit;
+    }
+    echo json_encode(["error" => "ID tidak valid"]);
+    exit;
+}
+
 echo json_encode(["error" => "Aksi tidak dikenali"]);
