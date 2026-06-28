@@ -226,10 +226,6 @@ export default function FoodRecommendations() {
               <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{item.price}</span>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-      
       {/* Modal Detail Peta */}
       {selectedFood && (
         <div 
@@ -261,9 +257,8 @@ export default function FoodRecommendations() {
               display: 'flex',
               flexDirection: 'column'
             }}
-            onClick={e => e.stopPropagation()} // Mencegah klik dalam modal menutup modal
+            onClick={e => e.stopPropagation()}
           >
-            {/* Modal Header */}
             <div style={{ 
               padding: '16px 20px', 
               borderBottom: '1px solid var(--surface-border)',
@@ -280,7 +275,6 @@ export default function FoodRecommendations() {
               </button>
             </div>
             
-            {/* Modal Body - Map */}
             <div style={{ width: '100%', height: '250px', background: '#e5e7eb', position: 'relative' }}>
               <iframe
                 title="Google Maps"
@@ -293,7 +287,6 @@ export default function FoodRecommendations() {
               ></iframe>
             </div>
 
-            {/* Modal Footer */}
             <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
                 <MapPin size={16} />
