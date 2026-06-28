@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Utensils, MapPin, Tag, Flame, Coffee, Pizza, ShoppingBag, Star, Leaf, X, ExternalLink } from 'lucide-react';
 
 export default function FoodRecommendations() {
@@ -230,7 +231,7 @@ export default function FoodRecommendations() {
       </div>
 
       {/* Modal Detail Peta */}
-      {selectedFood && (
+      {selectedFood && createPortal(
         <div 
           className="animate-fade-in"
           style={{
@@ -359,7 +360,8 @@ export default function FoodRecommendations() {
               </a>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
