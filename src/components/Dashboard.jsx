@@ -6,6 +6,7 @@ import ExpenseHistory from './ExpenseHistory';
 import FoodRecommendations from './FoodRecommendations';
 import MonthlyChart from './MonthlyChart';
 import WeeklyChart from './WeeklyChart';
+import WeeklyReport from './WeeklyReport';
 
 export default function Dashboard({ 
   budgetLimit, todaySpent, onAddExpense, onDeleteExpense, onEditExpense, totalBudget, expenses, budgetMode,
@@ -56,6 +57,8 @@ export default function Dashboard({
       <WeeklyChart expenses={expenses || []} totalBudget={totalBudget} />
       
       <MonthlyChart expenses={expenses || []} totalBudget={totalBudget} />
+
+      <WeeklyReport expenses={expenses || []} />
 
       <ExpenseHistory 
         expenses={expenses || []} 
