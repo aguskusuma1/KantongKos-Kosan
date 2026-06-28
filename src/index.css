@@ -197,3 +197,27 @@ p {
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Responsive Dashboard Layout */
+.dashboard-layout {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.dashboard-left, .dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .dashboard-layout {
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    padding: 0;
+  }
+}

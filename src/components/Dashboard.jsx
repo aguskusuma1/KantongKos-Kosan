@@ -18,16 +18,17 @@ export default function Dashboard({
   const totalSpentMonth = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
 
   return (
-    <div className="animate-fade-in" style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
-      <header style={{ marginBottom: '24px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '1.8rem', fontWeight: '700', background: 'linear-gradient(to right, #60a5fa, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Auto-Budgeting
-        </h1>
-        <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Tanpa Ribet</p>
-      </header>
+    <div className="animate-fade-in dashboard-layout">
+      <div className="dashboard-left">
+        <header style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: '700', background: 'linear-gradient(to right, #60a5fa, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Auto-Budgeting
+          </h1>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Tanpa Ribet</p>
+        </header>
 
       {/* Navigasi Bulan */}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px' }}>
         <button onClick={prevMonth} style={{ background: 'var(--panel-track-bg)', border: 'none', borderRadius: '50%', padding: '8px', cursor: 'pointer', color: 'var(--text-primary)' }}>
           <ChevronLeft size={20} />
         </button>
@@ -47,7 +48,7 @@ export default function Dashboard({
       
       {isCurrentMonth && <ExpenseForm onAddExpense={onAddExpense} />}
       
-      <div style={{ marginTop: '20px', textAlign: 'center' }}>
+      <div style={{ textAlign: 'center' }}>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
           Total Budget {budgetMode === 'mingguan' ? 'Minggu' : 'Bulan'} Ini: Rp {Math.round(totalBudget).toLocaleString('id-ID')}
         </p>
@@ -56,15 +57,18 @@ export default function Dashboard({
       <WeeklyChart expenses={expenses || []} totalBudget={totalBudget} />
       
       <MonthlyChart expenses={expenses || []} totalBudget={totalBudget} />
+      </div>
 
-      <ExpenseHistory 
-        expenses={expenses || []} 
-        totalBudget={totalBudget} 
-        onDeleteExpense={onDeleteExpense}
-        onEditExpense={onEditExpense}
-      />
-      
-      <FoodRecommendations />
+      <div className="dashboard-right">
+        <ExpenseHistory 
+          expenses={expenses || []} 
+          totalBudget={totalBudget} 
+          onDeleteExpense={onDeleteExpense}
+          onEditExpense={onEditExpense}
+        />
+        
+        <FoodRecommendations />
+      </div>
     </div>
   );
 }
