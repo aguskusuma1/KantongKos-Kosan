@@ -197,6 +197,46 @@ export default function FoodRecommendations() {
       category: ['Aneka Nasi', 'Terdekat'],
       color: 'var(--success)',
       mapQuery: 'Soto Ayam Singaraja'
+    },
+    {
+      id: 19,
+      name: 'Dapur Rizkiyah (Nasi Campur)',
+      price: 'Rp 10.000',
+      location: 'Senggol Jl. Udayana (Sebelah Kampus)',
+      rating: '4.7',
+      category: ['Aneka Nasi', 'Terdekat'],
+      color: 'var(--success)',
+      mapQuery: 'Dapur Rizkiyah Singaraja'
+    },
+    {
+      id: 20,
+      name: 'Bakmi Ayam Gembira',
+      price: 'Rp 15.000',
+      location: 'Jl. Udayana',
+      rating: '4.8',
+      category: ['Cepat Saji', 'Terdekat'],
+      color: 'var(--warning)',
+      mapQuery: 'Bakmi Ayam Gembira Singaraja'
+    },
+    {
+      id: 21,
+      name: 'Warung Tomat Pizza & Pasta',
+      price: 'Rp 25.000',
+      location: 'Jl. Udayana No.8 (Depan GOR)',
+      rating: '4.9',
+      category: ['Cepat Saji', 'Terdekat'],
+      color: 'var(--danger)',
+      mapQuery: 'Warung Tomat Singaraja'
+    },
+    {
+      id: 22,
+      name: 'Warung Kayana',
+      price: 'Rp 12.000',
+      location: 'Jl. Udayana (Depan Kantor Pajak)',
+      rating: '4.6',
+      category: ['Aneka Nasi', 'Terdekat'],
+      color: 'var(--primary)',
+      mapQuery: 'Warung Kayana Singaraja'
     }
   ];
 
