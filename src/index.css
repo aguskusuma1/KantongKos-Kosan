@@ -48,11 +48,89 @@
   --input-bg: rgba(255, 255, 255, 0.5);
 }
 
+[data-theme='high-contrast'] {
+  --bg-color: #000000;
+  --surface-color: #000000;
+  --surface-border: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: #ffff00; /* Kuning terang untuk pembacaan maksimal */
+  
+  --primary: #ffffff;
+  --primary-hover: #e2e8f0;
+  
+  --success: #00ff00; /* Hijau neon */
+  --warning: #ffff00; /* Kuning neon */
+  --danger: #ff3b30;  /* Merah terang */
+  
+  --glass-bg: #000000;
+  --glass-blur: none;
+  --glass-shadow: none;
+  
+  --panel-bg: #000000;
+  --panel-track-bg: #1e293b;
+  --panel-item-bg: #000000;
+  --input-bg: #000000;
+}
+
+/* Skala font root untuk zoom teks */
+html {
+  font-size: 16px;
+  transition: font-size 0.2s ease;
+}
+
+html[data-font-size='large'] {
+  font-size: 18.5px; /* ~115% */
+}
+
+html[data-font-size='xlarge'] {
+  font-size: 21px; /* ~130% */
+}
+
+/* Modifikasi tombol & input khusus Kontras Tinggi */
+[data-theme='high-contrast'] .btn-primary {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
+[data-theme='high-contrast'] .btn-primary:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+[data-theme='high-contrast'] .btn-danger {
+  background: #000000 !important;
+  color: #ff3b30 !important;
+  border: 2px solid #ff3b30 !important;
+}
+
+[data-theme='high-contrast'] .btn-danger:hover {
+  background: #ff3b30 !important;
+  color: #000000 !important;
+}
+
+[data-theme='high-contrast'] .input-field {
+  border: 2px solid #ffffff !important;
+  background: #000000 !important;
+}
+
+[data-theme='high-contrast'] .input-field:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.5) !important;
+}
+
+[data-theme='high-contrast'] .glass-panel {
+  border: 2px solid #ffffff !important;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 
 body {
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;

@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
-import { Brain, TrendingUp, Pizza, Coffee, Leaf, Info, Utensils } from 'lucide-react';
+import { Brain, TrendingUp, Pizza, Coffee, Leaf, Info, Utensils, Volume2 } from 'lucide-react';
+import { speakText } from '../lib/tts';
+
 
 export default function WeeklyReport({ expenses }) {
   const reportData = useMemo(() => {
@@ -27,7 +29,7 @@ export default function WeeklyReport({ expenses }) {
     last7DaysExpenses.forEach(e => {
       const amount = Number(e.amount);
       totalSpent += amount;
-      
+
       if (amount > maxExpense.amount) {
         maxExpense = { amount, description: e.description };
       }
@@ -67,8 +69,8 @@ export default function WeeklyReport({ expenses }) {
       if (keywords.fastFood.some(k => desc.includes(k))) { counters.fastFood++; matched = true; }
       if (keywords.healthy.some(k => desc.includes(k))) { counters.healthy++; matched = true; }
       if (keywords.drinks.some(k => desc.includes(k))) { counters.drinks++; matched = true; }
-      if (keywords.heavy.some(k => desc.includes(k)) && !matched) { counters.heavy++; matched = true; } 
-      
+      if (keywords.heavy.some(k => desc.includes(k)) && !matched) { counters.heavy++; matched = true; }
+
       if (!matched) counters.other++;
     });
 
@@ -101,11 +103,43 @@ export default function WeeklyReport({ expenses }) {
 
   if (!reportData) return null;
 
+  const handleNarrate = () => {
+    const maxExpText = reportData.maxExpense.amount > 0 
+      ? `Pengeluaran terbesar kamu adalah ${reportData.maxExpense.description} sebesar Rp ${reportData.maxExpense.amount.toLocaleString('id-ID')}.` 
+      : '';
+    const textToSpeak = `Laporan Tujuh Hari. Kamu telah menghabiskan total Rp ${reportData.totalSpent.toLocaleString('id-ID')} minggu ini. ${maxExpText} Hari paling boros adalah hari ${reportData.maxDayName}. Pola konsumsi kamu menunjukkan: ${reportData.insightMsg}`;
+    speakText(textToSpeak);
+  };
+
   return (
-    <div className="glass-panel animate-fade-in" style={{ padding: '20px', marginTop: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', borderBottom: '1px solid var(--surface-border)', paddingBottom: '12px' }}>
-        <Brain size={20} color="var(--primary)" />
-        <h2 style={{ fontSize: '1.2rem', margin: 0, fontWeight: '600' }}>Laporan 7 Hari</h2>
+    <div 
+      className="glass-panel animate-fade-in" 
+      style={{ padding: '20px', marginTop: '24px' }}
+      role="region"
+      aria-label="Laporan Analisis Mingguan"
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid var(--surface-border)', paddingBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Brain size={20} color="var(--primary)" />
+          <h2 style={{ fontSize: '1.2rem', margin: 0, fontWeight: '600' }}>Laporan 7 Hari</h2>
+        </div>
+        <button 
+          onClick={handleNarrate}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            padding: '4px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          title="Suarakan laporan mingguan"
+          aria-label="Suarakan ringkasan laporan 7 hari ini secara verbal"
+        >
+          <Volume2 size={18} />
+        </button>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

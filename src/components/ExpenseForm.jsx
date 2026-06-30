@@ -22,7 +22,7 @@ export default function ExpenseForm({ onAddExpense }) {
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '20px' }}>
+    <div className="glass-panel" style={{ padding: '20px' }} role="region" aria-label="Form Catat Pengeluaran Baru">
       <h3 style={{ fontSize: '1.1rem', marginBottom: '16px' }}>Catat Pengeluaran Baru</h3>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
@@ -33,6 +33,7 @@ export default function ExpenseForm({ onAddExpense }) {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
+            aria-label="Nominal pengeluaran dalam Rupiah"
           />
         </div>
         <div className="input-group">
@@ -42,6 +43,7 @@ export default function ExpenseForm({ onAddExpense }) {
             placeholder="Keterangan (Opsional)"
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
+            aria-label="Keterangan atau rincian pengeluaran"
           />
         </div>
         <div className="input-group">
@@ -52,12 +54,14 @@ export default function ExpenseForm({ onAddExpense }) {
             onChange={(e) => setDate(e.target.value)}
             required
             style={{ color: 'var(--text-primary)' }}
+            aria-label="Tanggal pengeluaran"
           />
         </div>
         <button 
           type="submit" 
           className="btn btn-primary" 
           disabled={isSubmitting}
+          aria-label={isSubmitting ? 'Mencatat pengeluaran...' : 'Tambah Pengeluaran'}
         >
           <Plus size={20} />
           {isSubmitting ? 'Mencatat...' : 'Tambah Pengeluaran'}

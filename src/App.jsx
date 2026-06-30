@@ -6,8 +6,13 @@ import { useBudget } from './hooks/useBudget';
 import LandingPage from './components/LandingPage';
 import SettingsModal from './components/SettingsModal';
 import { LogOut, Sun, Moon, Settings } from 'lucide-react';
+import { speakText, stopSpeaking } from './lib/tts';
 
-function MainApp({ userId, theme, toggleTheme, handleLogout }) {
+
+function MainApp({ 
+  userId, theme, toggleTheme, handleLogout,
+  fontSize, setFontSize, voiceNarrator, setVoiceNarrator
+}) {
   const [showSettings, setShowSettings] = useState(false);
   const [isEditingBudget, setIsEditingBudget] = useState(false);
   const { 
@@ -37,6 +42,32 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
   const handleSaveBudget = (amount) => {
     saveBudget(amount);
     setIsEditingBudget(false);
+    if (voiceNarrator) {
+      speakText(`Berhasil mengatur budget baru sebesar Rp ${amount.toLocaleString('id-ID')}.`);
+    }
+  };
+
+  const handleAddExpense = async (amount, description, date) => {
+    await addExpense(amount, description, date);
+    if (voiceNarrator) {
+      const descText = description ? `untuk ${description}` : '';
+      speakText(`Berhasil menambahkan pengeluaran sebesar Rp ${amount.toLocaleString('id-ID')} ${descText}.`);
+    }
+  };
+
+  const handleDeleteExpense = async (id) => {
+    const expense = expenses.find(e => e.id === id);
+    await deleteExpense(id);
+    if (voiceNarrator && expense) {
+      speakText(`Berhasil menghapus pengeluaran ${expense.description || ''} sebesar Rp ${Number(expense.amount).toLocaleString('id-ID')}.`);
+    }
+  };
+
+  const handleEditExpense = async (id, amount, description) => {
+    await editExpense(id, amount, description);
+    if (voiceNarrator) {
+      speakText(`Berhasil mengubah pengeluaran menjadi ${description} sebesar Rp ${amount.toLocaleString('id-ID')}.`);
+    }
   };
 
   return (
@@ -50,6 +81,7 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}
           title="Pengaturan"
+          aria-label="Buka Pengaturan"
         >
           <Settings size={18} />
         </button>
@@ -62,6 +94,10 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
           toggleTheme={toggleTheme}
           onLogout={handleLogout}
           onChangeBudget={() => setIsEditingBudget(true)}
+          fontSize={fontSize}
+          setFontSize={setFontSize}
+          voiceNarrator={voiceNarrator}
+          setVoiceNarrator={setVoiceNarrator}
         />
       )}
 
@@ -72,9 +108,9 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
           <Dashboard 
             budgetLimit={todayBudget} 
             todaySpent={todaySpent} 
-            onAddExpense={addExpense}
-            onDeleteExpense={deleteExpense}
-            onEditExpense={editExpense}
+            onAddExpense={handleAddExpense}
+            onDeleteExpense={handleDeleteExpense}
+            onEditExpense={handleEditExpense}
             totalBudget={budget.total_budget}
             expenses={expenses}
             budgetMode={budget.mode}
@@ -82,6 +118,7 @@ function MainApp({ userId, theme, toggleTheme, handleLogout }) {
             nextMonth={nextMonth}
             prevMonth={prevMonth}
             isCurrentMonth={isCurrentMonth}
+            voiceNarrator={voiceNarrator}
           />
         )}
       </div>
@@ -93,14 +130,32 @@ function App() {
   const [userId, setUserId] = useState(() => localStorage.getItem('ab_user_id'));
   const [showAuth, setShowAuth] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('ab_theme') || 'dark');
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem('ab_font_size') || 'normal');
+  const [voiceNarrator, setVoiceNarrator] = useState(() => localStorage.getItem('ab_voice_narrator') === 'true');
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('ab_theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    document.documentElement.setAttribute('data-font-size', fontSize);
+    localStorage.setItem('ab_font_size', fontSize);
+  }, [fontSize]);
+
+  useEffect(() => {
+    localStorage.setItem('ab_voice_narrator', voiceNarrator ? 'true' : 'false');
+    if (!voiceNarrator) {
+      stopSpeaking();
+    }
+  }, [voiceNarrator]);
+
   const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    setTheme(prev => {
+      if (prev === 'dark') return 'light';
+      if (prev === 'light') return 'high-contrast';
+      return 'dark';
+    });
   };
 
   const handleLogout = () => {
@@ -120,6 +175,7 @@ function App() {
               cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
             }}
             title="Ubah Tema"
+            aria-label="Ubah Tema"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -133,10 +189,20 @@ function App() {
           <Auth onLoginSuccess={(user) => setUserId(user.id)} />
         )
       ) : (
-        <MainApp userId={userId} theme={theme} toggleTheme={toggleTheme} handleLogout={handleLogout} />
+        <MainApp 
+          userId={userId} 
+          theme={theme} 
+          toggleTheme={toggleTheme} 
+          handleLogout={handleLogout}
+          fontSize={fontSize}
+          setFontSize={setFontSize}
+          voiceNarrator={voiceNarrator}
+          setVoiceNarrator={setVoiceNarrator}
+        />
       )}
     </div>
   );
 }
+
 
 export default App;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Volume2 } from 'lucide-react';
+import { speakText } from '../lib/tts';
 
 export default function VisualMeter({ budgetLimit, todaySpent, isHistory = false }) {
   const isOver = todaySpent > budgetLimit;
@@ -29,12 +30,51 @@ export default function VisualMeter({ budgetLimit, todaySpent, isHistory = false
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
+  const handleNarrate = () => {
+    const limitLabel = isHistory ? 'Total Budget' : 'Limit Harian';
+    const textToSpeak = `${isHistory ? 'Total Pengeluaran Bulan Ini' : 'Budget Hari Ini'}. Terpakai Rp ${Math.round(todaySpent).toLocaleString('id-ID')} dari ${limitLabel} Rp ${Math.round(budgetLimit).toLocaleString('id-ID')}. Status: ${message}`;
+    speakText(textToSpeak);
+  };
+
   return (
-    <div className="glass-panel" style={{ textAlign: 'center', marginBottom: '24px' }}>
-      <h3 style={{ fontSize: '1.2rem', marginBottom: '20px' }}>{isHistory ? 'Total Pengeluaran' : 'Budget Hari Ini'}</h3>
+    <div 
+      className="glass-panel" 
+      style={{ textAlign: 'center', marginBottom: '24px' }}
+      role="region"
+      aria-label="Meteran Visual Pengeluaran"
+    >
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+        <h3 style={{ fontSize: '1.2rem', margin: 0 }}>{isHistory ? 'Total Pengeluaran' : 'Budget Hari Ini'}</h3>
+        <button 
+          onClick={handleNarrate}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            padding: '4px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          title="Suarakan budget saat ini"
+          aria-label="Suarakan budget saat ini secara verbal"
+        >
+          <Volume2 size={18} />
+        </button>
+      </div>
       
       <div style={{ position: 'relative', width: '160px', height: '160px', margin: '0 auto' }}>
-        <svg width="160" height="160" style={{ transform: 'rotate(-90deg)' }}>
+        <svg 
+          width="160" 
+          height="160" 
+          style={{ transform: 'rotate(-90deg)' }}
+          role="progressbar"
+          aria-valuenow={Math.round(percentage)}
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label={`Persentase pengeluaran: ${Math.round(percentage)}%`}
+        >
           {/* Background circle */}
           <circle
             cx="80"
@@ -81,7 +121,9 @@ export default function VisualMeter({ budgetLimit, todaySpent, isHistory = false
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
           color: color, background: `${color}20`, padding: '8px 12px', borderRadius: 'var(--radius-full)',
           fontSize: '0.85rem', fontWeight: '500'
-        }}>
+        }}
+        aria-live="polite"
+        >
           <Icon size={16} />
           {message}
         </div>
@@ -89,3 +131,4 @@ export default function VisualMeter({ budgetLimit, todaySpent, isHistory = false
     </div>
   );
 }
+

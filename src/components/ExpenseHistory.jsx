@@ -155,6 +155,7 @@ export default function ExpenseHistory({ expenses, totalBudget, onDeleteExpense,
                 position: 'relative',
                 minHeight: '40px'
               }}
+              aria-label={`Tanggal ${d.day} ${monthNames[currentMonth]} ${currentYear}. ${d.hasExpense ? (d.isOver ? 'Pengeluaran melebihi limit' : 'Pengeluaran aman') : 'Tidak ada pengeluaran'}. ${isSelected ? 'Saat ini terpilih.' : ''}`}
             >
               {d.day}
               {d.hasExpense && (
@@ -223,11 +224,39 @@ export default function ExpenseHistory({ expenses, totalBudget, onDeleteExpense,
               if (editingId === exp.id) {
                 return (
                   <div key={idx} style={{ background: 'var(--panel-bg)', padding: '12px', borderRadius: 'var(--radius-sm)', borderLeft: '3px solid var(--warning)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <input type="text" value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Nama Pengeluaran" className="input-field" style={{ padding: '8px', fontSize: '0.9rem' }} />
-                    <input type="number" value={editAmount} onChange={e => setEditAmount(e.target.value)} placeholder="Nominal" className="input-field" style={{ padding: '8px', fontSize: '0.9rem' }} />
+                    <input 
+                      type="text" 
+                      value={editDesc} 
+                      onChange={e => setEditDesc(e.target.value)} 
+                      placeholder="Nama Pengeluaran" 
+                      className="input-field" 
+                      style={{ padding: '8px', fontSize: '0.9rem' }} 
+                      aria-label="Ubah nama pengeluaran"
+                    />
+                    <input 
+                      type="number" 
+                      value={editAmount} 
+                      onChange={e => setEditAmount(e.target.value)} 
+                      placeholder="Nominal" 
+                      className="input-field" 
+                      style={{ padding: '8px', fontSize: '0.9rem' }} 
+                      aria-label="Ubah nominal pengeluaran"
+                    />
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', marginTop: '4px' }}>
-                      <button onClick={handleCancelEdit} style={{ background: 'transparent', border: '1px solid var(--surface-border)', padding: '6px 12px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}><X size={14} /> Batal</button>
-                      <button onClick={() => handleSaveEdit(exp.id)} style={{ background: 'var(--success)', border: 'none', padding: '6px 12px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', gap: '4px' }}><Check size={14} /> Simpan</button>
+                      <button 
+                        onClick={handleCancelEdit} 
+                        style={{ background: 'transparent', border: '1px solid var(--surface-border)', padding: '6px 12px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        aria-label="Batal mengubah pengeluaran"
+                      >
+                        <X size={14} /> Batal
+                      </button>
+                      <button 
+                        onClick={() => handleSaveEdit(exp.id)} 
+                        style={{ background: 'var(--success)', border: 'none', padding: '6px 12px', borderRadius: 'var(--radius-sm)', cursor: 'pointer', color: 'white', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        aria-label="Simpan perubahan pengeluaran"
+                      >
+                        <Check size={14} /> Simpan
+                      </button>
                     </div>
                   </div>
                 );
@@ -246,8 +275,20 @@ export default function ExpenseHistory({ expenses, totalBudget, onDeleteExpense,
                     </span>
                   </div>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <button onClick={() => handleEditClick(exp)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}><Edit2 size={16} /></button>
-                    <button onClick={() => handleDelete(exp.id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={16} /></button>
+                    <button 
+                      onClick={() => handleEditClick(exp)} 
+                      style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}
+                      aria-label={`Ubah pengeluaran ${exp.description || 'tanpa nama'}`}
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(exp.id)} 
+                      style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}
+                      aria-label={`Hapus pengeluaran ${exp.description || 'tanpa nama'}`}
+                    >
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 </div>
               );
