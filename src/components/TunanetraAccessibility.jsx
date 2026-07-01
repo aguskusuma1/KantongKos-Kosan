@@ -146,6 +146,51 @@ export default function TunanetraAccessibility({
     };
   }, [tunanetraMode]);
 
+  // Mutation observer untuk menonaktifkan keyboard bawaan (native) secara proaktif pada semua input
+  useEffect(() => {
+    if (!tunanetraMode) {
+      // Kembalikan inputmode asli jika dinonaktifkan
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        const original = input.getAttribute('data-original-inputmode');
+        if (original !== null) {
+          if (original) {
+            input.setAttribute('inputmode', original);
+          } else {
+            input.removeAttribute('inputmode');
+          }
+          input.removeAttribute('data-original-inputmode');
+        }
+      });
+      return;
+    }
+
+    const disableNativeKeyboard = () => {
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        if (!input.hasAttribute('data-original-inputmode')) {
+          input.setAttribute('data-original-inputmode', input.getAttribute('inputmode') || '');
+        }
+        input.setAttribute('inputmode', 'none');
+      });
+    };
+
+    disableNativeKeyboard();
+
+    const observer = new MutationObserver(() => {
+      disableNativeKeyboard();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [tunanetraMode, focusedInput]);
+
   // 4. Gestur Sapuan Layar (Swipe Gesture)
   useEffect(() => {
     if (!tunanetraMode) return;
@@ -474,6 +519,7 @@ export default function TunanetraAccessibility({
         {/* Tombol Dikte Suara */}
         <button
           onClick={toggleVoiceTyping}
+          onMouseDown={(e) => e.preventDefault()}
           style={{
             background: isListening ? 'var(--danger)' : 'var(--panel-item-bg)',
             border: '1px solid var(--surface-border)',
@@ -523,6 +569,10 @@ export default function TunanetraAccessibility({
                 data-key={key}
                 data-speak-text={speakTextVal}
                 onMouseEnter={() => handleKeyMouseEnter(key, speakTextVal)}
+                onMouseDown={(e) => e.preventDefault()}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                }}
                 onClick={() => handleKeyClick(key)}
                 className="kbd-key"
                 style={{
