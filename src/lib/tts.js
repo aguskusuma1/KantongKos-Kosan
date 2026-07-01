@@ -16,7 +16,16 @@ export function speakText(text, force = true) {
     window.speechSynthesis.cancel();
   }
 
-  const utterance = new SpeechSynthesisUtterance(text);
+  // Bersihkan dan ekspansi singkatan agar dilafalkan dengan baik
+  let cleanText = text || '';
+  if (cleanText) {
+    cleanText = cleanText.replace(/\btgl\b/gi, 'tanggal');
+    cleanText = cleanText.replace(/\bmg\b/gi, 'minggu');
+    cleanText = cleanText.replace(/\btgl\./gi, 'tanggal');
+    cleanText = cleanText.replace(/\bmg\./gi, 'minggu');
+  }
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
 
   // Set Bahasa Indonesia
   utterance.lang = 'id-ID';

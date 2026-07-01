@@ -120,10 +120,16 @@ export default function WeeklyChart({ expenses, totalBudget }) {
               
               {/* Labels */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>
+                <span 
+                  style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-primary)' }}
+                  aria-label={`Minggu ${data.week}`}
+                >
                   {data.label}
                 </span>
-                <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>
+                <span 
+                  style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}
+                  aria-label={`Tanggal ${data.range}`}
+                >
                   Tgl {data.range}
                 </span>
               </div>
