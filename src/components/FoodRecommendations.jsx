@@ -347,7 +347,16 @@ export default function FoodRecommendations() {
           <div 
             key={item.id} 
             className="animate-fade-in" 
+            role="button"
+            tabIndex="0"
+            aria-label={`Rekomendasi makanan: ${item.name}, Rating ${item.rating}, Lokasi ${item.location}, Harga ${item.price}. Ketuk dua kali untuk detail peta.`}
             onClick={() => setSelectedFood(item)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setSelectedFood(item);
+              }
+            }}
             style={{ 
               background: 'var(--panel-bg)',
               padding: '16px', 
@@ -440,6 +449,7 @@ export default function FoodRecommendations() {
               ></iframe>
               <button 
                 onClick={() => setSelectedFood(null)}
+                aria-label="Tutup Detail Peta"
                 style={{ 
                   position: 'absolute', 
                   top: '12px', 
