@@ -316,9 +316,16 @@ export default function TunanetraAccessibility({
   const typeCharacter = (char) => {
     if (!focusedInput) return;
 
-    const start = focusedInput.selectionStart;
-    const end = focusedInput.selectionEnd;
-    const currentValue = focusedInput.value;
+    const currentValue = focusedInput.value || '';
+    let start = focusedInput.selectionStart;
+    let end = focusedInput.selectionEnd;
+
+    // Fallback jika browser tidak mendukung seleksi untuk type="number"
+    if (start === null || typeof start !== 'number') {
+      start = currentValue.length;
+      end = currentValue.length;
+    }
+
     let newValue = currentValue;
     let speakFeedback = '';
 
@@ -352,7 +359,11 @@ export default function TunanetraAccessibility({
     setTimeout(() => {
       if (focusedInput) {
         const offset = char === 'BACKSPACE' ? -1 : char === 'SPACE' ? 1 : char === 'ENTER' ? 0 : char.length;
-        focusedInput.setSelectionRange(start + offset, start + offset);
+        try {
+          focusedInput.setSelectionRange(start + offset, start + offset);
+        } catch (e) {
+          // Abaikan jika tidak didukung oleh tipe input (seperti type="number")
+        }
       }
     }, 0);
 
