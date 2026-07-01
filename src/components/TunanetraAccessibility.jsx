@@ -119,7 +119,21 @@ export default function TunanetraAccessibility({
 
       // Cari elemen interaktif terdekat
       const interactiveEl = e.target.closest('button, input, select, textarea, a, [role="button"], [tabIndex="0"]');
-      if (!interactiveEl) return;
+      if (!interactiveEl) {
+        // Ini adalah elemen non-interaktif (seperti teks biasa, heading, paragraf)
+        // Kita bacakan teks yang disentuh tersebut
+        let textToRead = e.target.getAttribute('aria-label') || e.target.getAttribute('title') || e.target.innerText || e.target.textContent || '';
+        textToRead = textToRead.trim();
+        
+        if (textToRead) {
+          // Jangan bacakan jika teksnya terlalu panjang (misal seluruh body terklik tidak sengaja)
+          if (textToRead.length > 300) {
+            textToRead = textToRead.substring(0, 300) + '...';
+          }
+          speakText(textToRead, true);
+        }
+        return;
+      }
 
       const currentTime = Date.now();
       
