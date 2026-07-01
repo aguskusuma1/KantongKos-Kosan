@@ -2,6 +2,61 @@ import React, { useState, useEffect, useRef } from 'react';
 import { speakText, stopSpeaking } from '../lib/tts';
 import { Mic, MicOff, Check, Delete } from 'lucide-react';
 
+function formatIndonesianDate(dateStr) {
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return "Tanggal tidak valid";
+  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  return `${days[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+function parseIndonesianDateSpeech(speech) {
+  const monthsMap = {
+    januari: 0, jan: 0,
+    februari: 1, feb: 1,
+    maret: 2, mar: 2,
+    april: 3, apr: 3,
+    mei: 4,
+    juni: 5, jun: 5,
+    juli: 6, jul: 6,
+    agustus: 7, agt: 7, ags: 7,
+    september: 8, sep: 8,
+    oktober: 9, okt: 9,
+    november: 10, nov: 10,
+    desember: 11, des: 11
+  };
+
+  const cleanSpeech = speech.toLowerCase();
+  
+  const dateMatch = cleanSpeech.match(/(\d+)/);
+  let dateVal = new Date().getDate();
+  if (dateMatch) {
+    dateVal = parseInt(dateMatch[1]);
+  }
+
+  let monthVal = new Date().getMonth();
+  for (const [key, value] of Object.entries(monthsMap)) {
+    if (cleanSpeech.includes(key)) {
+      monthVal = value;
+      break;
+    }
+  }
+
+  const yearMatch = cleanSpeech.match(/(20\d{2})/);
+  let yearVal = new Date().getFullYear();
+  if (yearMatch) {
+    yearVal = parseInt(yearMatch[1]);
+  }
+
+  const dateObj = new Date(yearVal, monthVal, dateVal);
+  if (!isNaN(dateObj.getTime())) {
+    const offset = dateObj.getTimezoneOffset();
+    const localDate = new Date(dateObj.getTime() - (offset * 60000));
+    return localDate.toISOString().split('T')[0];
+  }
+  return null;
+}
+
 export default function TunanetraAccessibility({ 
   tunanetraMode, 
   setTunanetraMode, 
@@ -329,7 +384,28 @@ export default function TunanetraAccessibility({
     let newValue = currentValue;
     let speakFeedback = '';
 
-    if (char === 'BACKSPACE') {
+    if (char === 'KEMARIN') {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      newValue = yesterday.toISOString().split('T')[0];
+      speakFeedback = `Set tanggal ke kemarin. Tanggal disetel ke ${formatIndonesianDate(newValue)}`;
+    } else if (char === 'HARI_INI') {
+      const today = new Date();
+      newValue = today.toISOString().split('T')[0];
+      speakFeedback = `Set tanggal ke hari ini. Tanggal disetel ke ${formatIndonesianDate(newValue)}`;
+    } else if (char === 'TAMBAH_HARI') {
+      const dateObj = new Date(currentValue);
+      const targetDate = isNaN(dateObj.getTime()) ? new Date() : dateObj;
+      targetDate.setDate(targetDate.getDate() + 1);
+      newValue = targetDate.toISOString().split('T')[0];
+      speakFeedback = `Tambah satu hari. Tanggal disetel ke ${formatIndonesianDate(newValue)}`;
+    } else if (char === 'KURANGI_HARI') {
+      const dateObj = new Date(currentValue);
+      const targetDate = isNaN(dateObj.getTime()) ? new Date() : dateObj;
+      targetDate.setDate(targetDate.getDate() - 1);
+      newValue = targetDate.toISOString().split('T')[0];
+      speakFeedback = `Kurangi satu hari. Tanggal disetel ke ${formatIndonesianDate(newValue)}`;
+    } else if (char === 'BACKSPACE') {
       if (start > 0 || end > start) {
         const deleteCount = end > start ? end - start : 1;
         const deletePos = end > start ? start : start - 1;
@@ -431,19 +507,44 @@ export default function TunanetraAccessibility({
           speakText("Tidak mendeteksi angka. Coba ucapkan angka saja.", true);
           return;
         }
+      } else if (inputType === 'date') {
+        const parsedDate = parseIndonesianDateSpeech(transcript);
+        if (parsedDate) {
+          finalVal = parsedDate;
+          speakText(`Dikte tanggal sukses. Menyetel tanggal ke ${formatIndonesianDate(parsedDate)}`, true);
+        } else {
+          speakText(`Tidak dapat mengenali tanggal dari ucapan "${transcript}". Ucapkan misalnya: satu juli dua ribu dua puluh enam.`, true);
+          return;
+        }
       }
 
       // Input teks ke input saat ini
-      const start = focusedInput.selectionStart;
-      const end = focusedInput.selectionEnd;
-      const currentValue = focusedInput.value;
-      const newValue = currentValue.substring(0, start) + finalVal + currentValue.substring(end);
+      let newValue;
+      if (inputType === 'date') {
+        newValue = finalVal;
+      } else {
+        const start = focusedInput.selectionStart || 0;
+        const end = focusedInput.selectionEnd || 0;
+        const currentValue = focusedInput.value || '';
+        newValue = currentValue.substring(0, start) + finalVal + currentValue.substring(end);
+      }
       
-      focusedInput.value = newValue;
+      const prototype = focusedInput.tagName === 'TEXTAREA' 
+        ? window.HTMLTextAreaElement.prototype 
+        : window.HTMLInputElement.prototype;
+        
+      const setter = Object.getOwnPropertyDescriptor(prototype, 'value')?.set;
+      if (setter) {
+        setter.call(focusedInput, newValue);
+      } else {
+        focusedInput.value = newValue;
+      }
       const ev = new Event('input', { bubbles: true });
       focusedInput.dispatchEvent(ev);
 
-      speakText(`Memasukkan kata: ${finalVal}`, true);
+      if (inputType !== 'date') {
+        speakText(`Memasukkan kata: ${finalVal}`, true);
+      }
     };
 
     recognition.onerror = (e) => {
@@ -467,6 +568,7 @@ export default function TunanetraAccessibility({
 
   // Render Virtual Accessibility Keyboard
   const isNumeric = inputType === 'number';
+  const isDate = inputType === 'date';
   
   const numKeys = [
     ['1', '2', '3'],
@@ -482,12 +584,22 @@ export default function TunanetraAccessibility({
     ['BACKSPACE', 'SPACE', 'ENTER']
   ];
 
-  const currentLayout = isNumeric ? numKeys : alphaKeys;
+  const dateKeys = [
+    ['KEMARIN', 'HARI_INI'],
+    ['KURANGI_HARI', 'TAMBAH_HARI'],
+    ['ENTER']
+  ];
+
+  const currentLayout = isDate ? dateKeys : (isNumeric ? numKeys : alphaKeys);
 
   const getKeyLabel = (key) => {
     if (key === 'BACKSPACE') return <Delete size={20} />;
     if (key === 'ENTER') return <Check size={20} />;
     if (key === 'SPACE') return 'SPASI';
+    if (key === 'KEMARIN') return 'KEMARIN';
+    if (key === 'HARI_INI') return 'HARI INI';
+    if (key === 'KURANGI_HARI') return '-1 HARI';
+    if (key === 'TAMBAH_HARI') return '+1 HARI';
     return key;
   };
 
@@ -495,6 +607,10 @@ export default function TunanetraAccessibility({
     if (key === 'BACKSPACE') return 'Hapus';
     if (key === 'ENTER') return 'Selesai';
     if (key === 'SPACE') return 'Spasi';
+    if (key === 'KEMARIN') return 'Kemarin';
+    if (key === 'HARI_INI') return 'Hari ini';
+    if (key === 'KURANGI_HARI') return 'Kurangi satu hari';
+    if (key === 'TAMBAH_HARI') return 'Tambah satu hari';
     return key;
   };
 
