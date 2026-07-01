@@ -149,17 +149,27 @@ export default function TunanetraAccessibility({
   // Mutation observer untuk menonaktifkan keyboard bawaan (native) secara proaktif pada semua input
   useEffect(() => {
     if (!tunanetraMode) {
-      // Kembalikan inputmode asli jika dinonaktifkan
+      // Kembalikan inputmode dan readOnly asli jika dinonaktifkan
       const inputs = document.querySelectorAll('input, textarea');
       inputs.forEach(input => {
-        const original = input.getAttribute('data-original-inputmode');
-        if (original !== null) {
-          if (original) {
-            input.setAttribute('inputmode', original);
+        const originalInputMode = input.getAttribute('data-original-inputmode');
+        if (originalInputMode !== null) {
+          if (originalInputMode) {
+            input.setAttribute('inputmode', originalInputMode);
           } else {
             input.removeAttribute('inputmode');
           }
           input.removeAttribute('data-original-inputmode');
+        }
+
+        const originalReadOnly = input.getAttribute('data-original-readonly');
+        if (originalReadOnly !== null) {
+          if (originalReadOnly === 'true') {
+            input.setAttribute('readonly', 'true');
+          } else {
+            input.removeAttribute('readonly');
+          }
+          input.removeAttribute('data-original-readonly');
         }
       });
       return;
@@ -168,10 +178,17 @@ export default function TunanetraAccessibility({
     const disableNativeKeyboard = () => {
       const inputs = document.querySelectorAll('input, textarea');
       inputs.forEach(input => {
+        // Simpan inputmode asli
         if (!input.hasAttribute('data-original-inputmode')) {
           input.setAttribute('data-original-inputmode', input.getAttribute('inputmode') || '');
         }
         input.setAttribute('inputmode', 'none');
+
+        // Simpan readonly asli dan paksa readonly = true
+        if (!input.hasAttribute('data-original-readonly')) {
+          input.setAttribute('data-original-readonly', input.hasAttribute('readonly') ? 'true' : 'false');
+        }
+        input.setAttribute('readonly', 'true');
       });
     };
 
