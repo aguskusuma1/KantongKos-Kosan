@@ -1,9 +1,10 @@
 import React from 'react';
-import { X, Sun, Moon, LogOut, Edit2, Eye, Type, Volume2, VolumeX } from 'lucide-react';
+import { X, Sun, Moon, LogOut, Edit2, Eye, Type, Volume2, VolumeX, Accessibility } from 'lucide-react';
 
 export default function SettingsModal({ 
   onClose, theme, toggleTheme, onLogout, onChangeBudget,
-  fontSize, setFontSize, voiceNarrator, setVoiceNarrator
+  fontSize, setFontSize, voiceNarrator, setVoiceNarrator,
+  tunanetraMode, setTunanetraMode
 }) {
   return (
     <div style={{
@@ -126,6 +127,31 @@ export default function SettingsModal({
             </div>
             <span style={{ fontSize: '0.8rem', color: voiceNarrator ? 'var(--success)' : 'var(--text-secondary)', fontWeight: '600' }}>
               {voiceNarrator ? 'Aktif' : 'Nonaktif'}
+            </span>
+          </button>
+
+          {/* Fitur Tunanetra */}
+          <button 
+            onClick={() => {
+              const newVal = !tunanetraMode;
+              setTunanetraMode(newVal);
+              if (newVal) {
+                setVoiceNarrator(true);
+              }
+            }}
+            className="btn"
+            style={{ 
+              background: 'var(--panel-bg)', color: 'var(--text-primary)', 
+              border: '1px solid var(--surface-border)', justifyContent: 'space-between'
+            }}
+            aria-label={`Fitur Tunanetra Aksesibilitas. Status saat ini: ${tunanetraMode ? 'Aktif' : 'Nonaktif'}`}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Accessibility size={18} color={tunanetraMode ? "var(--success)" : "var(--text-secondary)"} /> 
+              Fitur Tunanetra
+            </div>
+            <span style={{ fontSize: '0.8rem', color: tunanetraMode ? 'var(--success)' : 'var(--text-secondary)', fontWeight: '600' }}>
+              {tunanetraMode ? 'Aktif' : 'Nonaktif'}
             </span>
           </button>
 

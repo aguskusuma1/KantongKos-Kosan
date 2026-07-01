@@ -7,11 +7,13 @@ import LandingPage from './components/LandingPage';
 import SettingsModal from './components/SettingsModal';
 import { LogOut, Sun, Moon, Settings } from 'lucide-react';
 import { speakText, stopSpeaking } from './lib/tts';
+import TunanetraAccessibility from './components/TunanetraAccessibility';
 
 
 function MainApp({ 
   userId, theme, toggleTheme, handleLogout,
-  fontSize, setFontSize, voiceNarrator, setVoiceNarrator
+  fontSize, setFontSize, voiceNarrator, setVoiceNarrator,
+  tunanetraMode, setTunanetraMode
 }) {
   const [showSettings, setShowSettings] = useState(false);
   const [isEditingBudget, setIsEditingBudget] = useState(false);
@@ -39,11 +41,11 @@ function MainApp({
     );
   }
 
-  const handleSaveBudget = (amount) => {
-    saveBudget(amount);
+  const handleSaveBudget = (amount, mode) => {
+    saveBudget(amount, mode);
     setIsEditingBudget(false);
     if (voiceNarrator) {
-      speakText(`Berhasil mengatur budget baru sebesar Rp ${amount.toLocaleString('id-ID')}.`);
+      speakText(`Berhasil mengatur budget ${mode === 'mingguan' ? 'mingguan' : 'bulanan'} baru sebesar Rp ${amount.toLocaleString('id-ID')}.`);
     }
   };
 
@@ -72,6 +74,15 @@ function MainApp({
 
   return (
     <div style={{ width: '100%' }}>
+      <TunanetraAccessibility 
+        tunanetraMode={tunanetraMode} 
+        setTunanetraMode={setTunanetraMode}
+        expenses={expenses}
+        onBackToHome={() => {
+          setShowSettings(false);
+          setIsEditingBudget(false);
+        }}
+      />
       <div style={{ display: 'flex', justifyContent: 'flex-end', paddingBottom: '10px' }}>
         <button 
           onClick={() => setShowSettings(true)}
@@ -98,6 +109,8 @@ function MainApp({
           setFontSize={setFontSize}
           voiceNarrator={voiceNarrator}
           setVoiceNarrator={setVoiceNarrator}
+          tunanetraMode={tunanetraMode}
+          setTunanetraMode={setTunanetraMode}
         />
       )}
 
@@ -132,6 +145,14 @@ function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('ab_theme') || 'dark');
   const [fontSize, setFontSize] = useState(() => localStorage.getItem('ab_font_size') || 'normal');
   const [voiceNarrator, setVoiceNarrator] = useState(() => localStorage.getItem('ab_voice_narrator') === 'true');
+  const [tunanetraMode, setTunanetraMode] = useState(() => localStorage.getItem('ab_tunanetra_mode') === 'true');
+
+  useEffect(() => {
+    localStorage.setItem('ab_tunanetra_mode', tunanetraMode ? 'true' : 'false');
+    if (tunanetraMode) {
+      setVoiceNarrator(true);
+    }
+  }, [tunanetraMode]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -198,6 +219,8 @@ function App() {
           setFontSize={setFontSize}
           voiceNarrator={voiceNarrator}
           setVoiceNarrator={setVoiceNarrator}
+          tunanetraMode={tunanetraMode}
+          setTunanetraMode={setTunanetraMode}
         />
       )}
     </div>

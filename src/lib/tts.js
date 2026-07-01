@@ -32,8 +32,9 @@ export function speakText(text, force = true) {
   }
 
   // Pengaturan nada dan kecepatan
+  const isTunanetra = localStorage.getItem('ab_tunanetra_mode') === 'true';
   utterance.pitch = 1.0;
-  utterance.rate = 0.95; // Sedikit diperlambat agar lebih jelas didengar
+  utterance.rate = isTunanetra ? 1.6 : 0.95; // Kecepatan tinggi untuk tunanetra, normal untuk asisten biasa
 
   currentUtterance = utterance;
   window.speechSynthesis.speak(utterance);
