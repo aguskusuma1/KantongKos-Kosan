@@ -320,8 +320,8 @@ export default function TunanetraAccessibility({
     let start = focusedInput.selectionStart;
     let end = focusedInput.selectionEnd;
 
-    // Fallback jika browser tidak mendukung seleksi untuk type="number"
-    if (start === null || typeof start !== 'number') {
+    // Fallback jika browser tidak mendukung seleksi untuk type="number" atau jika input tipe number
+    if (focusedInput.type === 'number' || start === null || typeof start !== 'number') {
       start = currentValue.length;
       end = currentValue.length;
     }
@@ -350,8 +350,18 @@ export default function TunanetraAccessibility({
       speakFeedback = char;
     }
 
-    // Set nilai & trigger event React
-    focusedInput.value = newValue;
+    // Set nilai & trigger event React secara aman (React 16+ compatibility)
+    const prototype = focusedInput.tagName === 'TEXTAREA' 
+      ? window.HTMLTextAreaElement.prototype 
+      : window.HTMLInputElement.prototype;
+      
+    const setter = Object.getOwnPropertyDescriptor(prototype, 'value')?.set;
+    if (setter) {
+      setter.call(focusedInput, newValue);
+    } else {
+      focusedInput.value = newValue;
+    }
+
     const event = new Event('input', { bubbles: true });
     focusedInput.dispatchEvent(event);
     
