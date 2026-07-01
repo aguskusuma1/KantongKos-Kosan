@@ -209,26 +209,15 @@ export default function TunanetraAccessibility({
       const diffX = endX - startX;
       const diffY = endY - startY;
 
-      // Ambang batas gestur (minimal 120px)
-      if (Math.abs(diffX) > 120 || Math.abs(diffY) > 120) {
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-          // Horizontal Swipe
-          if (diffX < 0) {
-            // Swipe Kiri -> Kembali ke Home
-            triggerGoHome();
-          } else {
-            // Swipe Kanan -> Riwayat Pengeluaran terbaru
-            readRecentExpenses();
-          }
+      // Ambang batas gestur horizontal (minimal 120px)
+      // Dan pastikan gerakan vertikal relatif kecil (Math.abs(diffY) < 70) agar tidak mendeteksi scroll biasa
+      if (Math.abs(diffX) > 120 && Math.abs(diffY) < 70) {
+        if (diffX < 0) {
+          // Swipe Kiri -> Kembali ke Home
+          triggerGoHome();
         } else {
-          // Vertical Swipe
-          if (diffY < 0) {
-            // Swipe Atas -> Kembali ke Home
-            triggerGoHome();
-          } else {
-            // Swipe Bawah -> Riwayat Pengeluaran terbaru
-            readRecentExpenses();
-          }
+          // Swipe Kanan -> Riwayat Pengeluaran terbaru
+          readRecentExpenses();
         }
       }
     };
